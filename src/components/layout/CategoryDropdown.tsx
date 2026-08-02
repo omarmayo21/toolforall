@@ -95,7 +95,7 @@ export default function CategoryDropdown() {
                       {c.description}
                     </div>
                   </div>
-                  <div className="mt-0.5 flex shrink-0 items-center justify-center min-w-[20px] h-[20px] rounded-full bg-surface-100 dark:bg-surface-800 text-[10px] font-medium text-text-muted/70 group-hover:bg-surface-200 dark:group-hover:bg-surface-700 transition-colors">
+                  <div className="mt-0.5 flex shrink-0 items-center justify-center min-w-[20px] h-[20px] rounded-full bg-surface-200 dark:bg-surface-700 text-[10px] font-medium text-text-secondary transition-colors">
                     {toolCount}
                   </div>
                 </Link>

@@ -73,7 +73,7 @@ export default function HomePage() {
                   <span className="text-3xl">{category.icon}</span>
                   <div>
                     <h2 className="text-xl font-bold text-slate-900 dark:text-white">{category.title}</h2>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">{category.description}</p>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">{category.description}</p>
                   </div>
                 </div>
                 <Link href={`/${category.key}`} className="hidden shrink-0 text-sm font-medium text-indigo-600 hover:underline sm:block dark:text-indigo-400">
@@ -88,7 +88,7 @@ export default function HomePage() {
                     className="rounded-xl border border-slate-200 bg-white p-4 text-sm transition hover:-translate-y-0.5 hover:border-indigo-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900"
                   >
                     <p className="font-semibold text-slate-800 dark:text-slate-100">{tool.title}</p>
-                    <p className="mt-1 text-slate-500 dark:text-slate-400">{tool.shortDescription}</p>
+                    <p className="mt-1 text-slate-600 dark:text-slate-400">{tool.shortDescription}</p>
                   </Link>
                 ))}
               </div>

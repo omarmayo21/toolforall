@@ -53,6 +53,7 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
         <input
           type="search"
           role="combobox"
+          aria-label={t("searchPlaceholder")}
           aria-expanded={isExpanded}
           aria-controls="search-listbox"
           aria-autocomplete="list"
@@ -74,7 +75,7 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
             variant === "hero" ? "py-3 text-base shadow-lg pl-12 pr-14" : ""
           }`}
         />
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[10px] font-mono font-medium text-text-muted/70 bg-bg-default/50 border border-border-default rounded px-1.5 py-0.5">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[10px] font-mono font-medium text-text-secondary bg-bg-default/50 border border-border-default rounded px-1.5 py-0.5">
           ⌘K
         </div>
       </div>

@@ -19,8 +19,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border-default/50 bg-bg-default/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5 text-lg font-extrabold text-text-primary transition-opacity hover:opacity-80">
-          <LogoIcon className="h-8 w-8" />
+        <Link href="/" aria-label="ToolForAll Home" title="ToolForAll Home" className="flex shrink-0 items-center gap-2.5 text-lg font-extrabold text-text-primary transition-opacity hover:opacity-80">
+          <LogoIcon className="h-8 w-8" aria-hidden="true" />
           <span className="hidden sm:inline-block">ToolForAll</span>
         </Link>
 
