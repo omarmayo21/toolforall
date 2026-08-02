@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CATEGORIES, getCategory } from "@/lib/categories";
 import { getToolsByCategory } from "@/lib/tools-data";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import JsonLd from "@/components/analytics/JsonLd";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -22,7 +23,8 @@ export async function generateMetadata({
   return {
     title,
     description: category.description,
-    alternates: { canonical: `/${key}` },
+    robots: { index: true, follow: true },
+    alternates: { canonical: `${SITE_URL}/${key}` },
     openGraph: { title: `${title} | ${SITE_NAME}`, description: category.description, url: `${SITE_URL}/${key}` },
   };
 }
@@ -43,7 +45,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={jsonLd} />
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: category.title }]} />
       <div className="flex items-center gap-3">
         <span className="text-4xl">{category.icon}</span>

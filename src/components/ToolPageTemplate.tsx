@@ -6,18 +6,20 @@ import { getRelatedTools } from "@/lib/tools-data";
 import { SITE_URL } from "@/lib/site";
 import Breadcrumbs from "./layout/Breadcrumbs";
 import AdSlot from "./AdSlot";
+import JsonLd from "./analytics/JsonLd";
 
 export default function ToolPageTemplate({ tool, Component }: { tool: ToolMeta; Component: ComponentType }) {
   const category = getCategory(tool.category);
   const related = getRelatedTools(tool);
   const paragraphs = tool.article.split("\n\n");
 
-  const softwareAppSchema = {
+  const webAppSchema = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
+    "@type": "WebApplication",
     name: tool.title,
     applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Any (runs in web browser)",
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript, HTML5",
     url: `${SITE_URL}/${tool.category}/${tool.slug}`,
     description: tool.metaDescription,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -35,8 +37,7 @@ export default function ToolPageTemplate({ tool, Component }: { tool: ToolMeta; 
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <JsonLd data={faqSchema.mainEntity.length > 0 ? [webAppSchema, faqSchema] : [webAppSchema]} />
 
       <Breadcrumbs
         items={[

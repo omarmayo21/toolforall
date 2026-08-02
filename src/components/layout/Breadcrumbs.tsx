@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE_URL } from "@/lib/site";
+import JsonLd from "@/components/analytics/JsonLd";
 
 export interface Crumb {
   label: string;
@@ -20,7 +21,7 @@ export default function Breadcrumbs({ items }: { items: Crumb[] }) {
 
   return (
     <nav aria-label="Breadcrumb" className="mb-4 text-sm text-slate-500 dark:text-slate-400">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={jsonLd} />
       <ol className="flex flex-wrap items-center gap-1.5">
         {items.map((item, i) => (
           <li key={i} className="flex items-center gap-1.5">

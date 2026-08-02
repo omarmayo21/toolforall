@@ -26,7 +26,8 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — 100+ Free Online Tools`,
     description: SITE_DESCRIPTION,
   },
-  alternates: { canonical: "/" },
+  robots: { index: true, follow: true },
+  alternates: { canonical: SITE_URL },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

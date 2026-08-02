@@ -22,7 +22,8 @@ export async function generateMetadata({
     title: tool.title,
     description: tool.metaDescription,
     keywords: tool.keywords,
-    alternates: { canonical: `/${category}/${slug}` },
+    robots: { index: true, follow: true },
+    alternates: { canonical: `${SITE_URL}/${category}/${slug}` },
     openGraph: {
       title: `${tool.title} | ${SITE_NAME}`,
       description: tool.metaDescription,

@@ -5,18 +5,26 @@ import { getToolsByCategory, ALL_TOOLS } from "@/lib/tools-data";
 import SearchBar from "@/components/layout/SearchBar";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 
+import JsonLd from "@/components/analytics/JsonLd";
+
 export const metadata: Metadata = {
   title: `${SITE_NAME} — 100+ Free Online Tools for Developers, Designers & Marketers`,
   description: SITE_DESCRIPTION,
-  alternates: { canonical: "/" },
+  alternates: { canonical: SITE_URL },
 };
 
 export default function HomePage() {
-  const jsonLd = {
+  const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: SITE_NAME,
+    alternateName: "Tool For All",
     url: SITE_URL,
+    description: SITE_DESCRIPTION,
+    inLanguage: "en",
+    publisher: {
+      "@id": `${SITE_URL}/#organization`,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: `${SITE_URL}/?q={search_term_string}`,
@@ -24,9 +32,20 @@ export default function HomePage() {
     },
   };
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon`,
+    description: SITE_DESCRIPTION,
+    sameAs: [],
+  };
+
   return (
     <div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={[websiteSchema, organizationSchema]} />
 
       <section className="bg-gradient-to-b from-indigo-50 to-white px-4 py-16 text-center dark:from-slate-900 dark:to-slate-950 sm:px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
