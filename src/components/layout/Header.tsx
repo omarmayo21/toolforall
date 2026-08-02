@@ -2,67 +2,88 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import { useI18n } from "@/lib/i18n";
 import SearchBar from "./SearchBar";
+import CategoryDropdown from "./CategoryDropdown";
 import { ThemeToggle, LanguageToggle } from "./ThemeLangToggle";
+import { LogoIcon } from "./Logo";
+import { Menu, X } from "lucide-react";
 
 export default function Header() {
-  const { t, lang } = useI18n();
+  const { lang } = useI18n();
   const [open, setOpen] = useState(false);
+  const pathname = usePathname() || "";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 text-lg font-extrabold text-slate-900 dark:text-white">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-indigo-600 text-white">T</span>
-          ToolForAll
+    <header className="sticky top-0 z-40 border-b border-border-default/50 bg-bg-default/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5 text-lg font-extrabold text-text-primary transition-opacity hover:opacity-80">
+          <LogoIcon className="h-8 w-8" />
+          <span className="hidden sm:inline-block">ToolForAll</span>
         </Link>
 
-        <button
-          className="ml-auto rounded-md border border-slate-300 px-2 py-1 text-sm md:hidden dark:border-slate-700"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          ☰
-        </button>
+        {/* Categories Dropdown (Desktop) */}
+        <div className="hidden shrink-0 md:block ml-2">
+          <CategoryDropdown />
+        </div>
 
-        <div className="order-3 hidden w-full md:order-2 md:block md:w-auto md:flex-1 md:px-4">
+        {/* Desktop Search (Command Palette Style) */}
+        <div className="hidden flex-1 justify-center px-4 md:flex">
           <SearchBar />
         </div>
 
-        <nav className="order-2 ml-auto hidden items-center gap-1 md:order-3 md:flex">
+        {/* Actions (Desktop) */}
+        <nav className="ml-auto hidden shrink-0 items-center gap-1 md:flex">
           <ThemeToggle />
           <LanguageToggle />
         </nav>
-      </div>
 
-      <div className="hidden border-t border-slate-100 md:block dark:border-slate-900">
-        <div className="mx-auto flex max-w-7xl flex-wrap gap-x-4 gap-y-1 px-4 py-2 text-sm sm:px-6">
-          {CATEGORIES.map((c) => (
-            <Link key={c.key} href={`/${c.key}`} className="text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400">
-              {c.icon} {lang === "ar" ? c.titleAr : c.title}
-            </Link>
-          ))}
+        {/* Mobile controls */}
+        <div className="flex flex-1 items-center justify-end gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            className="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition-colors hover:bg-surface-100 hover:text-text-primary dark:hover:bg-surface-800"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
       </div>
 
-      {open ? (
-        <div className="border-t border-slate-200 px-4 py-3 md:hidden dark:border-slate-800">
+      {/* Mobile Menu */}
+      {open && (
+        <div className="flex flex-col gap-4 border-t border-border-default/50 bg-bg-default px-4 py-4 shadow-lg md:hidden animate-dropdown">
           <SearchBar />
-          <nav className="mt-3 flex flex-col gap-2 text-sm">
-            {CATEGORIES.map((c) => (
-              <Link key={c.key} href={`/${c.key}`} onClick={() => setOpen(false)} className="text-slate-700 dark:text-slate-300">
-                {c.icon} {lang === "ar" ? c.titleAr : c.title}
-              </Link>
-            ))}
+          <nav className="flex flex-col gap-1">
+            {CATEGORIES.map((c) => {
+              const isActive = pathname.startsWith(`/${c.key}`);
+              return (
+                <Link 
+                  key={c.key} 
+                  href={`/${c.key}`} 
+                  onClick={() => setOpen(false)} 
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
+                    isActive 
+                      ? "bg-surface-100 font-medium text-text-primary dark:bg-surface-800" 
+                      : "text-text-secondary hover:bg-surface-50 hover:text-text-primary dark:hover:bg-surface-800/50"
+                  }`}
+                >
+                  <span className="flex h-8 w-8 items-center justify-center rounded-md bg-surface-100 text-text-primary dark:bg-surface-800">
+                    {c.icon}
+                  </span>
+                  {lang === "ar" ? c.titleAr : c.title}
+                </Link>
+              );
+            })}
           </nav>
-          <div className="mt-3 flex items-center gap-2">
-            <ThemeToggle />
+          <div className="flex items-center justify-center border-t border-border-default/50 pt-4">
             <LanguageToggle />
           </div>
         </div>
-      ) : null}
+      )}
     </header>
   );
 }

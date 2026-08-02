@@ -2,6 +2,7 @@
 
 import { useTheme } from "@/lib/theme-provider";
 import { useI18n } from "@/lib/i18n";
+import { Sun, Moon, Globe } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
@@ -9,9 +10,9 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       aria-label="Toggle dark mode"
-      className="grid h-9 w-9 place-items-center rounded-full border border-slate-300 text-sm hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+      className="grid h-11 w-11 md:h-9 md:w-9 place-items-center rounded-md text-text-secondary transition-colors hover:bg-surface-100 hover:text-text-primary dark:hover:bg-surface-800"
     >
-      {theme === "dark" ? "☀️" : "🌙"}
+      {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
     </button>
   );
 }
@@ -22,9 +23,10 @@ export function LanguageToggle() {
     <button
       onClick={() => setLang(lang === "en" ? "ar" : "en")}
       aria-label="Toggle language"
-      className="rounded-full border border-slate-300 px-3 py-1.5 text-sm font-medium hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
+      className="flex h-11 md:h-9 items-center gap-1.5 rounded-md px-3 md:px-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-100 hover:text-text-primary dark:hover:bg-surface-800"
     >
-      {lang === "en" ? "العربية" : "English"}
+      <Globe size={16} />
+      <span>{lang === "en" ? "العربية" : "EN"}</span>
     </button>
   );
 }

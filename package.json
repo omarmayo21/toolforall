@@ -29,6 +29,7 @@
     "js-yaml": "^5.2.2",
     "jsbarcode": "^3.12.3",
     "jszip": "^3.10.1",
+    "lucide-react": "^1.28.0",
     "marked": "^18.0.7",
     "next": "16.2.6",
     "papaparse": "^5.5.4",
