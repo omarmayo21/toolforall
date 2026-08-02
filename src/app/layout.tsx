@@ -6,7 +6,7 @@ import { I18nProvider } from "@/lib/i18n";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
-
+import { Analytics } from "@vercel/analytics/next";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: `${SITE_NAME} — 100+ Free Online Tools`, template: `%s | ${SITE_NAME}` },
@@ -35,6 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <main className="flex-1">{children}</main>
             <Footer />
           </I18nProvider>
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
