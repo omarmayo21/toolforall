@@ -1,0 +1,186 @@
+import type { ToolMeta } from "../types";
+
+const category = "pdf-tools" as const;
+
+export const pdfTools: ToolMeta[] = [
+  {
+    slug: "pdf-compressor",
+    title: "PDF Compressor",
+    shortDescription: "Reduce PDF file size by re-compressing embedded page images.",
+    metaDescription: "Free PDF compressor. Reduce PDF file size directly in your browser without uploading your document anywhere.",
+    category,
+    keywords: ["pdf compressor", "reduce pdf size online", "compress pdf free"],
+    componentKey: "PdfCompressor",
+    article:
+      "Large PDF files — often bloated by high-resolution embedded images or scanned pages — can be slow to email, upload, or share. This PDF Compressor reduces file size by re-rendering each page and re-encoding it at an adjustable quality level, entirely inside your browser, without ever uploading your document to a server.\n\nThis tool is useful for anyone needing to email a PDF that exceeds an attachment size limit, students and professionals submitting documents to portals with upload size restrictions, and businesses archiving large volumes of scanned paperwork more efficiently.\n\nTo use it, upload your PDF and choose a compression level (light, medium, or strong). The tool renders each page and re-encodes it as a compressed image within a new PDF, trading a small amount of visual fidelity for a significantly smaller file. A before/after file size comparison is shown before you download the result, so you can judge whether the quality tradeoff is acceptable for your use case.\n\nFor example, a 20-page scanned document saved as a 15MB PDF from a flatbed scanner at very high DPI might compress down to 2-4MB at medium compression — small enough to attach to virtually any email service — while still remaining perfectly legible for a document containing text and simple graphics.\n\nA point to understand is that this method works by rasterizing pages into images, which is the most reliable way to shrink file size directly in a browser without a server; the tradeoff is that any text becomes part of a flattened image rather than remaining as selectable, searchable text in the compressed output. If your primary need is to preserve selectable, searchable text at a smaller file size, and your PDF's size mainly comes from something other than page images, this rasterization-based compression may not be the ideal approach — always check the compressed result meets your specific requirements before replacing your original file.\n\nTip: try medium compression first for scanned documents and photos, since it typically balances file size and readability well; reserve strong compression for cases where hitting a specific size limit matters more than maximum visual fidelity, and always keep your original uncompressed file as a backup.",
+    faqs: [
+      { q: "Does compression keep my PDF's text selectable?", a: "No, this method rasterizes each page into a compressed image to reliably reduce size in-browser, so the output text is no longer selectable or searchable." },
+      { q: "Is my PDF uploaded to a server?", a: "No, compression happens entirely in your browser by rendering and re-encoding each page locally." },
+      { q: "How much can file size be reduced?", a: "It varies significantly by content — image-heavy or high-DPI scanned PDFs often shrink the most, sometimes by 70-90%." },
+      { q: "Will compression affect image quality?", a: "Yes, higher compression levels trade more visual fidelity for smaller file size; preview the result before replacing your original file." },
+      { q: "Can I compress a very large, multi-hundred-page PDF?", a: "Yes, though processing time increases with page count since each page is individually rendered and re-encoded." },
+    ],
+  },
+  {
+    slug: "merge-pdf",
+    title: "Merge PDF (Combine Multiple PDFs)",
+    shortDescription: "Combine multiple PDF files into a single document, in your chosen order.",
+    metaDescription: "Free PDF merger. Combine multiple PDF files into one document instantly in your browser, in any order you choose.",
+    category,
+    keywords: ["merge pdf", "combine pdf files", "pdf merger online free"],
+    componentKey: "MergePdf",
+    article:
+      "Combining several PDF files into a single document is one of the most common document tasks — whether merging chapters of a report, combining scanned pages into one file, or assembling multiple invoices into a single document for record-keeping. This tool merges any number of PDF files into one, entirely inside your browser.\n\nThis tool is useful for students combining multiple assignment or research PDFs into a single submission, professionals assembling reports from separate sections, and administrative staff combining scanned documents or forms into one file for easier filing and sharing.\n\nTo use it, upload two or more PDF files by dragging and dropping them or clicking to browse. Reorder the files using the up/down controls to control the exact order pages will appear in the merged document, then click \"Merge PDFs.\" The combined document is generated instantly and ready to download.\n\nFor example, merging three separate 5-page PDF reports in a specific order (introduction.pdf, data.pdf, conclusion.pdf) produces a single, correctly ordered 15-page document — ready to send as one attachment rather than three separate files, which is both more professional and far easier for the recipient to manage and print.\n\nA common mistake is uploading files in the wrong order and forgetting to check the final arrangement before merging — always double check the file order list matches your intended final page sequence, since reordering after merging would require redoing the entire process from your original files. Another point worth knowing is that this merge process preserves each source PDF's original quality and text searchability exactly since it combines the underlying PDF page objects directly, rather than rasterizing pages into images the way some PDF compressors do.\n\nTip: after merging, always open the resulting file and do a quick page-by-page scan to confirm every page landed exactly where expected, especially for documents where correct order carries legal, academic, or professional significance — a fast visual check takes seconds and avoids the possibility of submitting or sending a document with an unnoticed ordering mistake.",
+    faqs: [
+      { q: "Are my PDFs uploaded to a server to be merged?", a: "No, merging happens entirely in your browser using a JavaScript PDF library; your files are never uploaded anywhere." },
+      { q: "Does merging preserve original quality and searchable text?", a: "Yes, since it combines the actual PDF page objects directly rather than rendering pages into flattened images." },
+      { q: "Can I merge more than two PDFs at once?", a: "Yes, you can upload and merge any number of PDF files in one operation." },
+      { q: "Can I control the order of the merged pages?", a: "Yes, reorder the uploaded files before merging using the up/down controls to set the exact final page sequence." },
+      { q: "Is there a file size limit?", a: "Since processing happens locally in your browser, there's no artificial upload limit, though very large combined files may take longer to process on lower-powered devices." },
+    ],
+  },
+  {
+    slug: "split-pdf",
+    title: "Split PDF Page by Page",
+    shortDescription: "Split a PDF into individual pages or custom page ranges.",
+    metaDescription: "Free PDF splitter. Split a PDF into individual pages or custom ranges instantly in your browser, no upload required.",
+    category,
+    keywords: ["split pdf", "pdf splitter online", "extract pages from pdf"],
+    componentKey: "SplitPdf",
+    article:
+      "Sometimes you need just a few pages from a larger PDF — a single chapter, a specific form, or one invoice from a batch — without the rest of the document. This tool splits a PDF into individual single-page files, or extracts a custom page range into a new, smaller PDF, entirely inside your browser.\n\nThis tool is useful for administrative staff extracting a single form or page from a scanned multi-page document, students isolating one chapter from a textbook PDF, and anyone needing to share just a relevant portion of a larger document rather than the whole file.\n\nTo use it, upload your PDF — the tool shows the total page count and a thumbnail-free page list. Choose \"Split into individual pages\" to generate one file per page (delivered as a downloadable zip), or enter a custom page range (like 3-7) to extract just those pages into a single new PDF.\n\nFor example, splitting a 50-page annual report so you can share only the 10-page financial summary section (pages 15-24) with a specific stakeholder takes just a few seconds — enter that range, click Split, and download a clean, standalone 10-page PDF rather than sending the entire report and asking the recipient to navigate to the relevant section themselves.\n\nA common mistake is miscounting the desired page range, especially confusing a document's printed page numbers (which might start counting from a cover page or table of contents) with the PDF's actual internal page order — this tool always numbers pages by their actual position in the file (page 1 is the very first page of the PDF), so always double check against the actual PDF viewer rather than any printed numbering that appears on the page itself. Another point to keep in mind is that splitting, like merging, preserves each extracted page's original quality and searchable text exactly, since it works directly with the underlying PDF page objects.\n\nTip: when splitting into individual pages for a large document, the resulting zip file can contain many separate files — consider using a clear naming convention (which this tool applies automatically, numbering each file to match its original page position) to keep track of which extracted page corresponds to which part of the original document.",
+    faqs: [
+      { q: "Can I extract just a few specific pages instead of every page?", a: "Yes, enter a custom page range (like 3-7) to extract exactly those pages into one new PDF." },
+      { q: "What happens when I split into individual pages?", a: "You receive a zip file containing one separate PDF for every page in the original document, each named by its page number." },
+      { q: "Does splitting preserve the original quality and text?", a: "Yes, it works directly with the underlying PDF page objects, so quality and searchable text are fully preserved." },
+      { q: "Is my PDF uploaded to a server?", a: "No, splitting happens entirely and instantly in your browser." },
+      { q: "How does page numbering work for the range field?", a: "Pages are numbered by their actual position in the file, starting at 1 for the very first page, regardless of any printed page numbers shown on the page itself." },
+    ],
+  },
+  {
+    slug: "jpg-to-pdf",
+    title: "JPG to PDF Converter",
+    shortDescription: "Combine one or more JPG images into a single downloadable PDF.",
+    metaDescription: "Free JPG to PDF converter. Combine one or more images into a single PDF document instantly in your browser.",
+    category,
+    keywords: ["jpg to pdf", "convert image to pdf", "photos to pdf converter"],
+    componentKey: "JpgToPdf",
+    article:
+      "Turning one or more photos or scanned images into a single PDF is a common need — for submitting scanned documents, compiling a photo portfolio, or simply creating a shareable, print-ready file from images. This converter combines your JPG (or PNG) images into a single, properly formatted PDF, entirely in your browser.\n\nThis tool is useful for students submitting photographed homework pages as a single PDF, small business owners converting scanned receipts or forms into one document, and anyone assembling a set of images into a shareable, universally viewable file format.\n\nTo use it, drag and drop one or more images (they'll be added as one page each, in the order uploaded), reorder them if needed, choose a page size (A4, Letter, or fit-to-image) and orientation, then click \"Convert to PDF.\" The resulting file downloads immediately, ready to share or print.\n\nFor example, photographing five pages of a signed contract with your phone and uploading all five images produces a single, properly ordered 5-page PDF — far more professional and easier to email or upload to a portal than sending five separate image files that a recipient would need to open individually.\n\nA common mistake is uploading images in the wrong order, resulting in a PDF with pages out of sequence — always verify and adjust the order using the reorder controls before converting, since fixing page order in a completed PDF requires either redoing the conversion or using a separate PDF page-reordering tool. Another consideration is image orientation: if a photographed page appears sideways, rotate it first (using the Flip/Rotate Image tool) before converting, since an incorrectly oriented image will appear the same way inside the resulting PDF page.\n\nTip: for scanned documents meant to look professional and print cleanly, choose the standard A4 or Letter page size (matching your region's convention) rather than \"fit-to-image,\" since this produces consistent, predictable page dimensions across all pages regardless of the original photos' exact resolution or aspect ratio.",
+    faqs: [
+      { q: "Can I combine multiple images into one PDF?", a: "Yes, upload as many images as you like; each becomes one page in the resulting PDF, in the order you arrange them." },
+      { q: "What page sizes are supported?", a: "A4, Letter, and a 'fit-to-image' option that sets the PDF page size to exactly match each image's dimensions." },
+      { q: "Is my photo uploaded to a server?", a: "No, the PDF is generated entirely in your browser using a JavaScript PDF library." },
+      { q: "What happens if my photo is sideways?", a: "It will appear sideways in the PDF too — rotate the image first using the Flip/Rotate Image tool before converting." },
+      { q: "Can I convert PNG images too, not just JPG?", a: "Yes, both JPG and PNG images are supported and can even be mixed within the same PDF." },
+    ],
+  },
+  {
+    slug: "pdf-to-jpg",
+    title: "PDF to JPG Converter",
+    shortDescription: "Convert each page of a PDF into a downloadable JPG image.",
+    metaDescription: "Free PDF to JPG converter. Convert every page of a PDF into a high-quality JPG image instantly in your browser.",
+    category,
+    keywords: ["pdf to jpg", "convert pdf to image", "pdf page to jpg online"],
+    componentKey: "PdfToJpg",
+    article:
+      "Sometimes you need a PDF page as a standalone image — to insert into a presentation, share on social media, or use in a design tool that doesn't accept PDFs directly. This converter renders every page of your PDF as a high-quality JPG image, entirely in your browser, ready to download individually or all at once as a zip.\n\nThis tool is useful for presenters needing to insert a PDF page as a static image slide, social media managers sharing an infographic or document page as an image post, and designers who need a PDF's content in a raster image format for further editing.\n\nTo use it, upload your PDF — the tool renders each page using an in-browser PDF rendering engine and generates a JPG preview for every one. Choose your desired output resolution (which affects image sharpness, especially important if the image will be displayed large or printed), then download individual pages or all of them together as a zip file.\n\nFor example, converting a 10-page PDF slide deck into JPG images lets you quickly drop each slide as a static image into another presentation tool or a webpage where PDF embedding isn't supported, without needing specialized software or a server-side conversion service.\n\nA common consideration is choosing an appropriate resolution: converting at too low a resolution produces blurry, pixelated images if displayed large or printed, while converting at very high resolution produces sharper images at the cost of larger file sizes and slightly longer processing time — for on-screen use, a standard resolution is usually sufficient, while print or large-display use benefits from a higher setting. Another point to understand is that, unlike the original PDF, the resulting JPG images are flat, non-selectable images — any text becomes part of the picture rather than remaining as copyable, searchable text.\n\nTip: when converting a text-heavy document intended primarily for reading rather than visual presentation, consider whether you actually need images at all — the dedicated Extract Text from PDF tool may better serve that specific need by giving you the actual text content rather than a picture of it.",
+    faqs: [
+      { q: "Does it convert every page, or just one?", a: "It converts every page in the PDF and lets you download them individually or all together as a zip file." },
+      { q: "Can I choose the image resolution?", a: "Yes, choose a lower resolution for smaller files suited to on-screen use, or higher resolution for sharper print-quality images." },
+      { q: "Is my PDF uploaded to a server?", a: "No, rendering happens entirely in your browser using a JavaScript PDF rendering engine." },
+      { q: "Will the text in the images remain selectable?", a: "No, the output is a flat raster image; text becomes part of the picture rather than remaining selectable or searchable." },
+      { q: "Can I convert just specific pages instead of the whole document?", a: "Yes, you can select which rendered pages to download individually rather than exporting the entire document." },
+    ],
+  },
+  {
+    slug: "extract-images-from-pdf",
+    title: "Extract Images from PDF",
+    shortDescription: "Pull every page's visual content out of a PDF as downloadable images.",
+    metaDescription: "Free tool to extract images from a PDF. Save every page's visual content as downloadable images instantly in your browser.",
+    category,
+    keywords: ["extract images from pdf", "get pictures from pdf online", "pdf image extractor"],
+    componentKey: "ExtractImagesFromPdf",
+    article:
+      "PDFs often contain photos, charts, diagrams, or illustrations you may want to reuse individually rather than viewing them locked inside the document. This tool extracts the visual content from every page of your PDF as separate, downloadable images, processed entirely in your browser.\n\nThis tool is useful for researchers pulling charts and figures out of an academic PDF for a presentation, designers extracting visual assets from a PDF-based style guide, and anyone who needs individual images from a PDF for reuse elsewhere.\n\nTo use it, upload your PDF and the tool renders each page as a high-resolution image, since this is the most reliable browser-based approach that works consistently across all PDFs regardless of how their internal images were originally embedded or compressed. Preview each page's rendered image, then download individual pages or all of them together as a zip file.\n\nFor example, extracting figures from a 20-page research paper produces one image per page, letting you quickly grab the two or three pages containing charts you actually need for a presentation, without manually taking screenshots of each one from a PDF viewer.\n\nAn important thing to understand is that this tool extracts full-page renders (capturing everything visible on that page, including any surrounding text) rather than isolating and cropping out only a specific embedded picture from within a page that also contains text — for a page containing both a chart and a paragraph of text, the extracted image will include the full page layout. If you need only a specific isolated graphic without surrounding content, use the Image Cropper tool afterward on the extracted page image to trim it down to exactly the area you need.\n\nTip: for the sharpest possible extracted images, especially if you plan to crop closely into a specific detail or print the result, choose the highest available rendering resolution before extracting, since starting from a higher-resolution source image gives you much more flexibility for any further cropping or resizing without introducing blur.",
+    faqs: [
+      { q: "Does this extract only the embedded picture, or the whole page?", a: "It renders and extracts the full page as an image, including any surrounding text. Use the Image Cropper tool afterward to isolate a specific graphic if needed." },
+      { q: "Why render full pages instead of pulling out individual embedded images directly?", a: "Full-page rendering works reliably across every PDF regardless of how internal images were embedded or compressed, making it the most consistent and robust browser-based approach." },
+      { q: "Is my PDF uploaded to a server?", a: "No, all rendering and extraction happens locally in your browser." },
+      { q: "Can I download all extracted pages at once?", a: "Yes, download them individually or all together as a single zip file." },
+      { q: "What resolution should I choose?", a: "Choose the highest available resolution if you plan to crop closely into details or print the result, for maximum flexibility." },
+    ],
+  },
+  {
+    slug: "rotate-pdf-pages",
+    title: "Rotate PDF Pages",
+    shortDescription: "Rotate all or specific pages of a PDF by 90, 180 or 270 degrees.",
+    metaDescription: "Free PDF page rotator. Rotate all or specific pages of a PDF by 90, 180 or 270 degrees instantly in your browser.",
+    category,
+    keywords: ["rotate pdf", "fix sideways pdf pages", "pdf page rotate online"],
+    componentKey: "RotatePdfPages",
+    article:
+      "Scanned documents frequently end up with one or more pages rotated sideways or upside down, which is awkward to read on screen and looks unprofessional when printed or shared. This tool rotates any or all pages of a PDF by 90°, 180°, or 270°, entirely in your browser, without needing desktop PDF software.\n\nThis tool is useful for administrative staff fixing sideways-scanned pages before filing or sharing a document, students correcting an incorrectly oriented scanned assignment, and anyone who received a PDF with one or more pages in the wrong orientation.\n\nTo use it, upload your PDF and view the total page count. Choose to rotate all pages uniformly, or select specific individual pages and set a different rotation for each — useful when only some pages within a document (like a single scanned page inserted sideways among otherwise correctly oriented pages) need correcting. Click \"Rotate & Download\" to get your corrected file.\n\nFor example, a 10-page scanned contract where only page 4 was accidentally scanned sideways can be fixed by selecting just page 4 and rotating it 90° clockwise, leaving the other nine pages completely untouched — producing a fully corrected document without needing to re-scan or rebuild the entire file.\n\nA common mistake is applying the same rotation to every page in a document where only specific pages actually need correcting, which would incorrectly rotate the pages that were already fine — always use the per-page rotation option when a document has mixed orientations rather than a single global rotate action. Another point to understand is that rotation changes how a page is displayed and printed but does not alter the actual pixel content of any embedded images — it simply adjusts the page's rotation metadata, which is why this operation is instant and produces zero quality loss regardless of how many times you apply it.\n\nTip: after rotating, always scroll through the entire resulting document to visually confirm every page appears correctly oriented, especially for longer documents where it's easy to miss whether every needed page was actually selected and corrected.",
+    faqs: [
+      { q: "Can I rotate just one page instead of the whole document?", a: "Yes, select specific pages and set an individual rotation for each, leaving other pages untouched." },
+      { q: "Does rotating a page reduce its quality?", a: "No, rotation only changes the page's orientation metadata; it doesn't alter or re-compress any embedded image or text content." },
+      { q: "Is my PDF uploaded to a server?", a: "No, rotation happens entirely and instantly in your browser." },
+      { q: "What rotation angles are supported?", a: "90°, 180°, and 270° (which is the same as 90° counter-clockwise) rotations are all supported per page." },
+      { q: "Can I undo a rotation after downloading?", a: "You would need to re-upload the downloaded file and apply the opposite rotation, since this tool doesn't retain history between sessions." },
+    ],
+  },
+  {
+    slug: "unlock-pdf",
+    title: "Unlock PDF / Remove Password (client-side)",
+    shortDescription: "Remove restriction-based passwords from a PDF, entirely in your browser.",
+    metaDescription: "Free tool to unlock a restricted PDF and remove owner-password restrictions, entirely client-side with no upload.",
+    category,
+    keywords: ["unlock pdf", "remove pdf password", "pdf password remover online"],
+    componentKey: "UnlockPdf",
+    article:
+      "Many PDFs are protected with an \"owner\" password that restricts actions like printing, copying text, or editing, without requiring any password just to open and view the document. This tool removes those restriction-based protections entirely inside your browser, producing an unrestricted copy of your PDF.\n\nThis tool is useful for anyone who owns or has legitimate rights to a PDF but finds themselves blocked from printing or copying text from it, archivists needing to remove outdated restrictions from internal documents, and professionals who need to edit a company-authored PDF that had print/copy restrictions applied by a previous tool.\n\nTo use it, upload a restricted PDF (one that opens without a password prompt but blocks actions like printing or copying). The tool loads the document while bypassing its restriction flags, then re-saves it as a clean, unrestricted PDF, ready for download.\n\nFor example, a company-internal template PDF that was exported with \"no copying\" and \"no printing\" restrictions can be reopened, freely edited, and reused after processing through this tool — useful when the original restrictions no longer serve any purpose but are still technically blocking legitimate use of a document you have every right to modify.\n\nAn important distinction: this tool removes restriction/permissions passwords (owner passwords) from PDFs that open without requiring any password at all — it cannot and does not attempt to bypass or crack a genuine \"open password\" (user password) that prevents a PDF from being opened or viewed in the first place, since that would require actually breaking real encryption, which this tool does not do and should never be used to attempt. Always ensure you have the legal right to modify any PDF you process here — removing restrictions from a document you don't have rights to is both an ethical and, in many jurisdictions, legal problem.\n\nTip: if your PDF prompts for a password before it even opens, this tool cannot help since that requires the actual password to decrypt the file — contact the document's original author or issuer to request the correct opening password instead of attempting to bypass it through any tool.",
+    faqs: [
+      { q: "Can this open a PDF that requires a password just to view it?", a: "No, it only removes restriction-based (owner password) protections on PDFs that already open without a password prompt. It cannot bypass genuine open/view password protection." },
+      { q: "Is my PDF uploaded to a server?", a: "No, everything happens locally in your browser; your file is never uploaded anywhere." },
+      { q: "Is it legal to remove restrictions from a PDF?", a: "Only remove restrictions from documents you own or have explicit rights to modify — always respect copyright and usage rights." },
+      { q: "What kinds of restrictions does this remove?", a: "Printing, copying, editing and form-filling restrictions applied via an owner password, common in exported or 'protected' PDF templates." },
+      { q: "Will this work on every restricted PDF?", a: "It works for standard owner-password restrictions using common PDF protection methods; some PDFs using less common or newer encryption schemes may not be supported." },
+    ],
+  },
+  {
+    slug: "extract-text-from-pdf",
+    title: "Extract Text from PDF",
+    shortDescription: "Pull all readable text out of a PDF into a plain text file.",
+    metaDescription: "Free tool to extract text from a PDF. Copy or download all readable text from any PDF document instantly in your browser.",
+    category,
+    keywords: ["extract text from pdf", "pdf to text online", "copy text from pdf"],
+    componentKey: "ExtractTextFromPdf",
+    article:
+      "Copying text out of a PDF one page at a time is tedious, especially for longer documents, and some PDF viewers make it awkward to select text that spans multiple columns or pages cleanly. This tool extracts all the readable text content from a PDF in one operation, giving you a clean plain-text version ready to copy, edit, or download.\n\nThis tool is useful for researchers pulling quotes or data out of academic papers, students extracting text from readings for note-taking or citation, and anyone needing to repurpose a PDF's written content in a word processor, translation tool, or text editor.\n\nTo use it, upload your PDF and the tool processes each page's text layer using an in-browser PDF text extraction engine, combining everything into a single output with page breaks clearly marked. Copy the full text or download it as a .txt file.\n\nFor example, extracting text from a 15-page PDF report produces a plain text document you can paste directly into a word processor for editing, run through a translation tool, or search using your text editor's find function — all much faster than manually selecting and copying content from each page individually inside a PDF viewer.\n\nA critical limitation to understand: this tool extracts actual embedded text — if your PDF is a scanned document (essentially a photograph of a page saved as a PDF, common with older scanned paperwork), there is no underlying text layer to extract at all, since the \"text\" is really just part of an image. In that case, this tool will return little or no text, and you would need an OCR (optical character recognition) tool specifically designed to recognize text within images, which is a fundamentally different and more complex technology than direct text extraction. Another common issue is that complex multi-column layouts or PDFs with unusual text encoding can sometimes extract in a different reading order than visually expected, since PDF text positioning doesn't always perfectly correspond to logical reading order.\n\nTip: before assuming an extraction went wrong, quickly check whether you can select text directly within a regular PDF viewer (like your browser's built-in PDF viewer) — if you can't select any text there either, the document is likely a scanned image-based PDF requiring OCR rather than a bug in this extraction tool.",
+    faqs: [
+      { q: "Why did I get no text from my PDF?", a: "Your PDF is likely a scanned image-based document with no actual text layer — this tool extracts existing embedded text and cannot perform OCR on images." },
+      { q: "Does it preserve formatting like bold or headings?", a: "No, the output is plain text without formatting, since the goal is extracting the raw readable content rather than replicating visual styling." },
+      { q: "Is my PDF uploaded to a server?", a: "No, extraction happens entirely in your browser using a JavaScript PDF text-extraction engine." },
+      { q: "Can extraction handle multi-column documents?", a: "Yes in most cases, though very complex layouts may occasionally extract text in a different order than the visual reading order." },
+      { q: "Can I download the extracted text as a file?", a: "Yes, you can copy it directly or download it as a plain .txt file." },
+    ],
+  },
+  {
+    slug: "pdf-page-numberer",
+    title: "PDF Page Numberer",
+    shortDescription: "Add page numbers to every page of a PDF in your chosen style and position.",
+    metaDescription: "Free PDF page numbering tool. Add page numbers in your chosen position and style to any PDF instantly in your browser.",
+    category,
+    keywords: ["add page numbers to pdf", "pdf page numberer online", "number pdf pages"],
+    componentKey: "PdfPageNumberer",
+    article:
+      "Adding page numbers to a PDF makes long documents easier to navigate, reference, and print correctly — especially important for reports, theses, contracts, and any document likely to be printed and physically handled. This tool stamps page numbers onto every page of your PDF, letting you control the position, starting number, and format.\n\nThis tool is useful for students formatting a thesis or long assignment for submission, businesses preparing multi-page contracts or reports for printing and distribution, and anyone assembling a document from multiple sources that needs consistent page numbering added afterward.\n\nTo use it, upload your PDF and choose where the page number should appear (bottom center, bottom right, bottom left, or the equivalent top positions), what starting number to begin counting from (useful if this PDF is a continuation of another document), and the number format (like \"1\", \"Page 1\", or \"1 of 12\"). Click \"Add Page Numbers\" and download the result.\n\nFor example, adding \"Page X of Y\" formatted numbers to the bottom center of every page in a 25-page report produces a professional, easy-to-reference document, especially helpful when printed and distributed as physical handouts where readers need to keep track of their place or reference a specific page in discussion.\n\nA common mistake is starting the count at 1 when a document is meant to continue numbering from a previous section (like an appendix that should start at page 51 because it follows a 50-page main report) — always set the correct starting number to match your document's actual intended sequence within a larger set. Another consideration is choosing a page number position that doesn't overlap with existing content near the edges of your pages — preview at least a few pages after adding numbers to confirm they land in a clear, readable area rather than overlapping with headers, footers, or margin notes already present in the original document.\n\nTip: for formal documents like academic papers or legal contracts, check whether there's a specific required format and position for page numbers (many institutions and style guides have exact specifications) before finalizing, since this varies notably between different formatting standards.",
+    faqs: [
+      { q: "Can I start numbering from something other than 1?", a: "Yes, set any starting number, useful when a document continues the numbering sequence from a previous section or file." },
+      { q: "What position options are available for the page number?", a: "Bottom center, bottom left, bottom right, and the equivalent top positions." },
+      { q: "Can I format the numbers as 'Page 1 of 12'?", a: "Yes, choose from several formats including plain numbers, 'Page X', and 'X of Y' style numbering." },
+      { q: "Is my PDF uploaded to a server?", a: "No, numbering is added entirely in your browser using a JavaScript PDF library." },
+      { q: "Will page numbers overlap with my existing content?", a: "Choose a position with enough clear margin space, and preview the result to confirm numbers don't overlap with existing headers or footers." },
+    ],
+  },
+];
