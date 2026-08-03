@@ -1,8 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import bcrypt from "bcryptjs";
-import CryptoJS from "crypto-js";
 import { Alert, Button, CopyButton, Field, OutputBox, Select, TextInput, ToolCard } from "./ui";
 import type { ComponentRegistry } from "@/lib/types";
 
@@ -118,9 +116,6 @@ export function PasswordStrengthChecker() {
 }
 
 /* ---------------- Htpasswd Generator ---------------- */
-function md5Raw(str: string) {
-  return CryptoJS.MD5(CryptoJS.enc.Latin1.parse(str)).toString(CryptoJS.enc.Latin1);
-}
 function to64(v: number, n: number) {
   const itoa64 = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   let s = "";
@@ -131,23 +126,27 @@ function to64(v: number, n: number) {
   }
   return s;
 }
-function apr1(password: string, salt: string) {
+function apr1InternalMd5(CryptoJS: any, str: string) {
+  return CryptoJS.MD5(CryptoJS.enc.Latin1.parse(str)).toString(CryptoJS.enc.Latin1);
+}
+async function apr1(password: string, salt: string) {
+  const { default: CryptoJS } = await import("crypto-js");
   const magic = "$apr1$";
   let ctx = password + magic + salt;
-  let final = md5Raw(password + salt + password);
+  let final = apr1InternalMd5(CryptoJS, password + salt + password);
   for (let pl = password.length; pl > 0; pl -= 16) {
     ctx += final.substring(0, pl > 16 ? 16 : pl);
   }
   for (let i = password.length; i; i >>= 1) {
     ctx += i & 1 ? String.fromCharCode(0) : password.charAt(0);
   }
-  final = md5Raw(ctx);
+  final = apr1InternalMd5(CryptoJS, ctx);
   for (let i = 0; i < 1000; i++) {
     let ctx1 = i & 1 ? password : final;
     if (i % 3) ctx1 += salt;
     if (i % 7) ctx1 += password;
     ctx1 += i & 1 ? final : password;
-    final = md5Raw(ctx1);
+    final = apr1InternalMd5(CryptoJS, ctx1);
   }
   const c = (idx: number) => final.charCodeAt(idx);
   let result = "";
@@ -172,14 +171,16 @@ export function HtpasswdGenerator() {
   const [format, setFormat] = useState<"bcrypt" | "apr1" | "sha1">("bcrypt");
   const [result, setResult] = useState("");
 
-  function generate() {
+  async function generate() {
     if (format === "bcrypt") {
+      const { default: bcrypt } = await import("bcryptjs");
       const hash = bcrypt.hashSync(password, 10);
       setResult(`${username}:${hash}`);
     } else if (format === "apr1") {
-      const hash = apr1(password, randomSalt(8));
+      const hash = await apr1(password, randomSalt(8));
       setResult(`${username}:${hash}`);
     } else {
+      const { default: CryptoJS } = await import("crypto-js");
       const hash = CryptoJS.SHA1(password).toString(CryptoJS.enc.Base64);
       setResult(`${username}:{SHA}${hash}`);
     }
@@ -221,22 +222,22 @@ export function BcryptTool() {
 
   function doHash() {
     setBusy(true);
-    setTimeout(() => {
+    import("bcryptjs").then(({ default: bcrypt }) => {
       setHash(bcrypt.hashSync(password, rounds));
       setBusy(false);
-    }, 10);
+    });
   }
 
   function doVerify() {
     setBusy(true);
-    setTimeout(() => {
+    import("bcryptjs").then(({ default: bcrypt }) => {
       try {
         setResult(bcrypt.compareSync(password, verifyHash) ? "✅ Match — this password matches the hash." : "❌ No match — this password does not match the hash.");
       } catch {
         setResult("❌ Invalid bcrypt hash format.");
       }
       setBusy(false);
-    }, 10);
+    });
   }
 
   return (

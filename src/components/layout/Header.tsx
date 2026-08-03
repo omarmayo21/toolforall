@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import { useI18n } from "@/lib/i18n";
 import SearchBar from "./SearchBar";
-import CategoryDropdown from "./CategoryDropdown";
 import { ThemeToggle, LanguageToggle } from "./ThemeLangToggle";
 import { LogoIcon } from "./Logo";
 import { Menu, X } from "lucide-react";
+
+const CategoryDropdown = dynamic(() => import("./CategoryDropdown"));
 
 export default function Header() {
   const { lang } = useI18n();

@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { searchTools } from "@/lib/tools-data";
+import type { ToolMeta } from "@/lib/types";
 import { useI18n } from "@/lib/i18n";
 import { Search } from "lucide-react";
 
@@ -10,11 +10,22 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
+  const [searchTools, setSearchTools] = useState<typeof import("@/lib/tools-data").searchTools>();
   const router = useRouter();
   const { t } = useI18n();
   const ref = useRef<HTMLDivElement>(null);
 
-  const results = useMemo(() => searchTools(query).slice(0, 8), [query]);
+  const loadSearchTools = useCallback(async () => {
+    if (searchTools) return;
+
+    const toolsData = await import("@/lib/tools-data");
+    setSearchTools(() => toolsData.searchTools);
+  }, [searchTools]);
+
+  const results: ToolMeta[] = useMemo(
+    () => (searchTools ? searchTools(query).slice(0, 8) : []),
+    [query, searchTools]
+  );
 
   function goTo(category: string, slug: string) {
     setOpen(false);
@@ -63,8 +74,12 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
             setQuery(e.target.value);
             setOpen(true);
             setSelectedIndex(-1);
+            void loadSearchTools();
           }}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            setOpen(true);
+            void loadSearchTools();
+          }}
           onBlur={() => setTimeout(() => {
             setOpen(false);
             setSelectedIndex(-1);
@@ -85,7 +100,7 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
           role="listbox"
           className="absolute z-50 mt-2 max-h-96 w-full overflow-y-auto rounded-xl border border-border-default bg-surface-default/95 backdrop-blur-xl shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
         >
-          {results.length ? (
+          {searchTools && results.length ? (
             results.map((r, idx) => {
               const isSelected = idx === selectedIndex;
               return (
@@ -105,9 +120,9 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
                 </button>
               );
             })
-          ) : (
+          ) : searchTools ? (
             <div className="px-4 py-3 text-center text-sm text-text-muted">{t("noResults")}</div>
-          )}
+          ) : null}
         </div>
       )}
     </div>

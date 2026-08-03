@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { PDFDocument, degrees, rgb, StandardFonts } from "pdf-lib";
-import JSZip from "jszip";
 import {
   Alert,
   Button,
@@ -47,6 +45,7 @@ export function PdfCompressor() {
     setResult(null);
     setOriginal(f.size);
     try {
+      const { PDFDocument } = await import("pdf-lib");
       const pdfjsLib = await getPdfjs();
       const buf = await f.arrayBuffer();
       const doc = await pdfjsLib.getDocument({ data: buf }).promise;
@@ -126,6 +125,7 @@ export function MergePdf() {
     setBusy(true);
     setError("");
     try {
+      const { PDFDocument } = await import("pdf-lib");
       const outDoc = await PDFDocument.create();
       for (const f of files) {
         const bytesIn = await f.arrayBuffer();
@@ -174,6 +174,7 @@ export function SplitPdf() {
 
   async function onFile(f: File) {
     setFile(f);
+    const { PDFDocument } = await import("pdf-lib");
     const doc = await PDFDocument.load(await f.arrayBuffer());
     setPageCount(doc.getPageCount());
   }
@@ -190,6 +191,7 @@ export function SplitPdf() {
     setBusy(true);
     setError("");
     try {
+      const { PDFDocument } = await import("pdf-lib");
       const doc = await PDFDocument.load(await file.arrayBuffer());
       const { start, end } = parseRange(range, doc.getPageCount());
       const outDoc = await PDFDocument.create();
@@ -209,7 +211,9 @@ export function SplitPdf() {
     setBusy(true);
     setError("");
     try {
+      const { PDFDocument } = await import("pdf-lib");
       const doc = await PDFDocument.load(await file.arrayBuffer());
+      const { default: JSZip } = await import("jszip");
       const zip = new JSZip();
       for (let i = 0; i < doc.getPageCount(); i++) {
         const outDoc = await PDFDocument.create();
@@ -263,6 +267,7 @@ export function JpgToPdf() {
   async function convert() {
     setBusy(true);
     try {
+      const { PDFDocument } = await import("pdf-lib");
       const doc = await PDFDocument.create();
       for (const file of images) {
         const bytesIn = await file.arrayBuffer();
@@ -346,6 +351,7 @@ export function PdfToJpg() {
   }
 
   async function downloadAll() {
+    const { default: JSZip } = await import("jszip");
     const zip = new JSZip();
     for (let i = 0; i < pages.length; i++) {
       const data = pages[i].split(",")[1];
@@ -394,6 +400,7 @@ export function RotatePdfPages() {
 
   async function onFile(f: File) {
     setFile(f);
+    const { PDFDocument } = await import("pdf-lib");
     const doc = await PDFDocument.load(await f.arrayBuffer());
     setPageCount(doc.getPageCount());
   }
@@ -402,6 +409,7 @@ export function RotatePdfPages() {
     if (!file) return;
     setBusy(true);
     try {
+      const { PDFDocument, degrees } = await import("pdf-lib");
       const doc = await PDFDocument.load(await file.arrayBuffer());
       doc.getPages().forEach((p) => p.setRotation(degrees((p.getRotation().angle + globalRotation) % 360)));
       const out = await doc.save();
@@ -440,6 +448,7 @@ export function UnlockPdf() {
     setBusy(true);
     setError("");
     try {
+      const { PDFDocument } = await import("pdf-lib");
       const doc = await PDFDocument.load(await f.arrayBuffer(), { ignoreEncryption: true });
       const out = await doc.save();
       downloadBlob("unlocked.pdf", new Blob([out.buffer as ArrayBuffer], { type: "application/pdf" }));
@@ -516,6 +525,7 @@ export function PdfPageNumberer() {
   async function run(f: File) {
     setBusy(true);
     try {
+      const { PDFDocument, rgb, StandardFonts } = await import("pdf-lib");
       const doc = await PDFDocument.load(await f.arrayBuffer());
       const font = await doc.embedFont(StandardFonts.Helvetica);
       const pages = doc.getPages();

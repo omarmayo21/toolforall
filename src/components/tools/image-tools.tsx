@@ -1,10 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import imageCompression from "browser-image-compression";
-import QRCode from "qrcode";
-import JsBarcode from "jsbarcode";
-import JSZip from "jszip";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -56,6 +52,7 @@ export function ImageCompressor() {
     setBusy(true);
     setError("");
     try {
+      const { default: imageCompression } = await import("browser-image-compression");
       const compressed = await imageCompression(f, {
         maxWidthOrHeight: 4096,
         useWebWorker: true,
@@ -415,6 +412,7 @@ export function QrCodeGenerator() {
   async function render() {
     if (!canvasRef.current) return;
     try {
+      const { default: QRCode } = await import("qrcode");
       await QRCode.toCanvas(canvasRef.current, text || " ", {
         width: 400,
         margin: 2,
@@ -483,12 +481,14 @@ export function BarcodeGenerator() {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    try {
-      JsBarcode(canvasRef.current, value || " ", { format, width: 2, height: 100, displayValue: true });
-      setError("");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not generate this barcode — check the value matches the format's requirements.");
-    }
+    import("jsbarcode").then(({ default: JsBarcode }) => {
+      try {
+        JsBarcode(canvasRef.current!, value || " ", { format, width: 2, height: 100, displayValue: true });
+        setError("");
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Could not generate this barcode — check the value matches the format's requirements.");
+      }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, format]);
 
@@ -541,6 +541,7 @@ export function FaviconGenerator() {
   async function downloadZip() {
     if (!img) return;
     setBusy(true);
+    const { default: JSZip } = await import("jszip");
     const zip = new JSZip();
     for (const size of FAVICON_SIZES) {
       const canvas = document.createElement("canvas");

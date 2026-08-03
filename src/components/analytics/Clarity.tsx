@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import Clarity from "@microsoft/clarity";
 
 export default function ClarityAnalytics() {
   useEffect(() => {
@@ -9,7 +8,9 @@ export default function ClarityAnalytics() {
 
     if (!projectId) return;
 
-    Clarity.init(projectId);
+    void import("@microsoft/clarity").then(({ default: Clarity }) => {
+      Clarity.init(projectId);
+    });
   }, []);
 
   return null;

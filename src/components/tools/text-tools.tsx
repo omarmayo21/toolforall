@@ -1,9 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { marked } from "marked";
-import TurndownService from "turndown";
-import { diffLines, diffWords } from "diff";
+import { useEffect, useMemo, useState } from "react";
 import {
   Alert,
   Button,
@@ -159,7 +156,13 @@ export function TextDiffChecker() {
   const [a, setA] = useState("");
   const [b, setB] = useState("");
   const [mode, setMode] = useState<"line" | "word">("word");
-  const parts = useMemo(() => (mode === "line" ? diffLines(a, b) : diffWords(a, b)), [a, b, mode]);
+  const [parts, setParts] = useState<{ value: string; added?: boolean; removed?: boolean }[]>([]);
+
+  useEffect(() => {
+    import("diff").then(({ diffLines, diffWords }) => {
+      setParts(mode === "line" ? diffLines(a, b) : diffWords(a, b));
+    });
+  }, [a, b, mode]);
 
   return (
     <ToolCard>
@@ -185,7 +188,13 @@ export function TextDiffChecker() {
 /* ---------------- Markdown to HTML ---------------- */
 export function MarkdownToHtml() {
   const [md, setMd] = useState("## Getting Started\n\nInstall with `npm install example`.\n\n- Fast\n- Simple\n- **Free**");
-  const html = useMemo(() => marked.parse(md, { async: false }) as string, [md]);
+  const [html, setHtml] = useState("");
+
+  useEffect(() => {
+    import("marked").then(({ marked }) => {
+      setHtml(marked.parse(md, { async: false }) as string);
+    });
+  }, [md]);
 
   return (
     <ToolCard>
@@ -208,13 +217,18 @@ export function MarkdownToHtml() {
 /* ---------------- HTML to Markdown ---------------- */
 export function HtmlToMarkdown() {
   const [html, setHtml] = useState("<h2>Getting Started</h2><p>Install with <code>npm install example</code>.</p>");
-  const md = useMemo(() => {
-    try {
-      const service = new TurndownService({ headingStyle: "atx", codeBlockStyle: "fenced" });
-      return service.turndown(html);
-    } catch {
-      return "";
-    }
+  const [md, setMd] = useState("");
+
+  useEffect(() => {
+    if (!html) { setMd(""); return; }
+    import("turndown").then(({ default: TurndownService }) => {
+      try {
+        const service = new TurndownService({ headingStyle: "atx", codeBlockStyle: "fenced" });
+        setMd(service.turndown(html));
+      } catch {
+        setMd("");
+      }
+    });
   }, [html]);
 
   return (

@@ -4,7 +4,6 @@ import { CATEGORIES } from "@/lib/categories";
 import { getToolsByCategory, ALL_TOOLS } from "@/lib/tools-data";
 import SearchBar from "@/components/layout/SearchBar";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
-
 import JsonLd from "@/components/analytics/JsonLd";
 
 export const metadata: Metadata = {

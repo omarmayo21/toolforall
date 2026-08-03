@@ -1,11 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import CryptoJS from "crypto-js";
-import * as yaml from "js-yaml";
-import { format as sqlFormat } from "sql-formatter";
-import { diffLines, diffWords } from "diff";
-import Papa from "papaparse";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -80,8 +75,9 @@ export function JsonToCsv() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
 
-  function convert() {
+  async function convert() {
     try {
+      const { default: Papa } = await import("papaparse");
       const parsed = JSON.parse(input);
       const arr = Array.isArray(parsed) ? parsed : [parsed];
       const csv = Papa.unparse(arr);
@@ -121,7 +117,8 @@ export function CsvToJson() {
   const [delimiter, setDelimiter] = useState(",");
   const [error, setError] = useState("");
 
-  function convert() {
+  async function convert() {
+    const { default: Papa } = await import("papaparse");
     const result = Papa.parse(input.trim(), { header: true, delimiter, dynamicTyping: true, skipEmptyLines: true });
     if (result.errors.length) {
       setError(result.errors[0].message);
@@ -532,8 +529,9 @@ export function SqlFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
 
-  function run() {
+  async function run() {
     try {
+      const { format: sqlFormat } = await import("sql-formatter");
       setOutput(sqlFormat(input, { language: dialect as never, keywordCase: "upper" }));
       setError("");
     } catch (e) {
@@ -777,8 +775,9 @@ export function YamlJsonConverter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
 
-  function toJson() {
+  async function toJson() {
     try {
+      const yaml = await import("js-yaml");
       const obj = yaml.load(input);
       setOutput(JSON.stringify(obj, null, 2));
       setError("");
@@ -786,8 +785,9 @@ export function YamlJsonConverter() {
       setError(e instanceof Error ? e.message : "Invalid YAML");
     }
   }
-  function toYaml() {
+  async function toYaml() {
     try {
+      const yaml = await import("js-yaml");
       const obj = JSON.parse(input);
       setOutput(yaml.dump(obj));
       setError("");
@@ -815,9 +815,16 @@ export function YamlJsonConverter() {
 /* ---------------- SHA256 ---------------- */
 export function Sha256Generator() {
   const [text, setText] = useState("hello");
+  const [hash, setHash] = useState("");
   const [fileHash, setFileHash] = useState("");
   const [fileName, setFileName] = useState("");
-  const hash = useMemo(() => (text ? CryptoJS.SHA256(text).toString() : ""), [text]);
+
+  useEffect(() => {
+    if (!text) { setHash(""); return; }
+    import("crypto-js").then(({ default: CryptoJS }) => {
+      setHash(CryptoJS.SHA256(text).toString());
+    });
+  }, [text]);
 
   async function hashFile(f: File) {
     setFileName(f.name);
@@ -853,13 +860,21 @@ export function Sha256Generator() {
 /* ---------------- MD5 ---------------- */
 export function Md5Generator() {
   const [text, setText] = useState("hello");
+  const [hash, setHash] = useState("");
   const [fileHash, setFileHash] = useState("");
   const [fileName, setFileName] = useState("");
-  const hash = useMemo(() => (text ? CryptoJS.MD5(text).toString() : ""), [text]);
+
+  useEffect(() => {
+    if (!text) { setHash(""); return; }
+    import("crypto-js").then(({ default: CryptoJS }) => {
+      setHash(CryptoJS.MD5(text).toString());
+    });
+  }, [text]);
 
   async function hashFile(f: File) {
     setFileName(f.name);
     const buf = await f.arrayBuffer();
+    const { default: CryptoJS } = await import("crypto-js");
     const wordArray = CryptoJS.lib.WordArray.create(buf as unknown as number[]);
     setFileHash(CryptoJS.MD5(wordArray).toString());
   }
@@ -1136,8 +1151,13 @@ export function DiffChecker() {
   const [a, setA] = useState("Hello world.\nThis is line two.\nUnchanged line.");
   const [b, setB] = useState("Hello there.\nThis is line two.\nUnchanged line.\nA new line added.");
   const [mode, setMode] = useState<"line" | "word">("line");
+  const [parts, setParts] = useState<{ value: string; added?: boolean; removed?: boolean }[]>([]);
 
-  const parts = useMemo(() => (mode === "line" ? diffLines(a, b) : diffWords(a, b)), [a, b, mode]);
+  useEffect(() => {
+    import("diff").then(({ diffLines, diffWords }) => {
+      setParts(mode === "line" ? diffLines(a, b) : diffWords(a, b));
+    });
+  }, [a, b, mode]);
 
   return (
     <ToolCard>
