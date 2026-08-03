@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { ToolMeta } from "@/lib/types";
 import { useI18n } from "@/lib/i18n";
@@ -26,6 +26,17 @@ export default function SearchBar({ variant = "header" }: { variant?: "header" |
     () => (searchTools ? searchTools(query).slice(0, 8) : []),
     [query, searchTools]
   );
+
+  useEffect(() => {
+    if (query.length > 2 && searchTools) {
+      const timeoutId = setTimeout(() => {
+        import("@/lib/analytics").then(({ trackEvent }) => {
+          trackEvent("search_tools", { query_length: query.length, results_count: results.length });
+        });
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [query, results.length, searchTools]);
 
   function goTo(category: string, slug: string) {
     setOpen(false);

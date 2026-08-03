@@ -5,6 +5,7 @@ import { CATEGORIES, getCategory } from "@/lib/categories";
 import { getToolsByCategory } from "@/lib/tools-data";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/analytics/JsonLd";
+import CategoryTracker from "@/components/analytics/CategoryTracker";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -45,6 +46,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <CategoryTracker category={category.key} />
       <JsonLd data={jsonLd} />
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: category.title }]} />
       <div className="flex items-center gap-3">

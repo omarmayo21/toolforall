@@ -33,7 +33,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     <ThemeContext.Provider
       value={{
         theme,
-        toggleTheme: () => setTheme((t) => (t === "light" ? "dark" : "light")),
+        toggleTheme: () => {
+          setTheme((t) => {
+            const nextTheme = t === "light" ? "dark" : "light";
+            import("@/lib/analytics").then(({ trackEvent }) => {
+              trackEvent("theme_change", { theme: nextTheme });
+            });
+            return nextTheme;
+          });
+        },
       }}
     >
       {children}

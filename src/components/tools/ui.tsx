@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState, type ChangeEvent, type DragEvent, type ReactNode } from "react";
+import { trackEvent, trackToolUsed } from "@/lib/analytics";
 
 export function ToolCard({ children }: { children: ReactNode }) {
   return (
@@ -21,30 +22,42 @@ export function Field({ label, children, hint }: { label: string; children: Reac
 }
 
 export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  const { className = "", ...rest } = props;
+  const { className = "", onChange, ...rest } = props;
   return (
     <input
       {...rest}
+      onChange={(e) => {
+        trackToolUsed();
+        onChange?.(e);
+      }}
       className={`w-full rounded-lg border border-border-default bg-surface-default px-3 py-2 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 ${className}`}
     />
   );
 }
 
 export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  const { className = "", ...rest } = props;
+  const { className = "", onChange, ...rest } = props;
   return (
     <textarea
       {...rest}
+      onChange={(e) => {
+        trackToolUsed();
+        onChange?.(e);
+      }}
       className={`w-full rounded-lg border border-border-default bg-surface-default px-3 py-2 font-mono text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 ${className}`}
     />
   );
 }
 
 export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  const { className = "", children, ...rest } = props;
+  const { className = "", children, onChange, ...rest } = props;
   return (
     <select
       {...rest}
+      onChange={(e) => {
+        trackToolUsed();
+        onChange?.(e);
+      }}
       className={`w-full rounded-lg border border-border-default bg-surface-default px-3 py-2 text-sm text-text-primary outline-none transition focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 ${className}`}
     >
       {children}
@@ -55,6 +68,7 @@ export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
 export function Button({
   className = "",
   variant = "primary",
+  onClick,
   ...rest
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "ghost" }) {
   const variants = {
@@ -68,6 +82,10 @@ export function Button({
   return (
     <button
       {...rest}
+      onClick={(e) => {
+        if (variant === "primary") trackToolUsed();
+        onClick?.(e);
+      }}
       className={`inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition disabled:cursor-not-allowed ${variants[variant]} ${className}`}
     />
   );
@@ -78,6 +96,7 @@ export function CopyButton({ getText, label = "Copy" }: { getText: () => string;
   const onClick = useCallback(async () => {
     const text = getText();
     if (!text) return;
+    trackEvent("copy_result");
     try {
       await navigator.clipboard.writeText(text);
     } catch {
@@ -120,11 +139,15 @@ export function ShareButton({ title }: { title: string }) {
 }
 
 export function downloadText(filename: string, content: string, mime = "text/plain") {
+  trackEvent("download_file", { file_type: mime || filename.split(".").pop() || "txt" });
   const blob = new Blob([content], { type: `${mime};charset=utf-8` });
-  downloadBlob(filename, blob);
+  downloadBlob(filename, blob, true);
 }
 
-export function downloadBlob(filename: string, blob: Blob) {
+export function downloadBlob(filename: string, blob: Blob, skipTrack = false) {
+  if (!skipTrack) {
+    trackEvent("download_file", { file_type: filename.split(".").pop() || "unknown" });
+  }
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -184,12 +207,20 @@ export function Dropzone({
     e.preventDefault();
     setIsOver(false);
     const files = Array.from(e.dataTransfer.files || []);
-    if (files.length) onFiles(multiple ? files : [files[0]]);
+    if (files.length) {
+      trackToolUsed();
+      trackEvent("upload_file", { file_type: files[0].name.split(".").pop() || "unknown" });
+      onFiles(multiple ? files : [files[0]]);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    if (files.length) onFiles(multiple ? files : [files[0]]);
+    if (files.length) {
+      trackToolUsed();
+      trackEvent("upload_file", { file_type: files[0].name.split(".").pop() || "unknown" });
+      onFiles(multiple ? files : [files[0]]);
+    }
     e.target.value = "";
   };
 

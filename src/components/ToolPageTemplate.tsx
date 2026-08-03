@@ -7,6 +7,7 @@ import { SITE_URL } from "@/lib/site";
 import Breadcrumbs from "./layout/Breadcrumbs";
 import AdSlot from "./AdSlot";
 import JsonLd from "./analytics/JsonLd";
+import ToolTracker from "./analytics/ToolTracker";
 
 export default function ToolPageTemplate({ tool, Component }: { tool: ToolMeta; Component: ComponentType }) {
   const category = getCategory(tool.category);
@@ -38,6 +39,7 @@ export default function ToolPageTemplate({ tool, Component }: { tool: ToolMeta; 
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
       <JsonLd data={faqSchema.mainEntity.length > 0 ? [webAppSchema, faqSchema] : [webAppSchema]} />
+      <ToolTracker toolName={tool.slug} category={tool.category} />
 
       <Breadcrumbs
         items={[

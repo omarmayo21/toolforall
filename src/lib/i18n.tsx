@@ -79,7 +79,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     lang,
     dir: lang === "ar" ? "rtl" : "ltr",
     t: (key) => dict[lang][key],
-    setLang: setLangState,
+    setLang: (newLang) => {
+      import("@/lib/analytics").then(({ trackEvent }) => {
+        trackEvent("language_change", { language: newLang });
+      });
+      setLangState(newLang);
+    },
   };
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
