@@ -5,6 +5,7 @@ import { getToolsByCategory, ALL_TOOLS } from "@/lib/tools-data";
 import SearchBar from "@/components/layout/SearchBar";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import JsonLd from "@/components/analytics/JsonLd";
+import AdSlot from "@/components/AdSlot";
 
 export const metadata: Metadata = {
   title: `${SITE_NAME} — 100+ Free Online Tools for Developers, Designers & Marketers`,
@@ -62,6 +63,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <AdSlot slot="hero" />
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         {CATEGORIES.map((category) => {
           const tools = getToolsByCategory(category.key);
@@ -100,6 +103,8 @@ export default function HomePage() {
           );
         })}
       </div>
+
+      <AdSlot slot="bottom" />
     </div>
   );
 }

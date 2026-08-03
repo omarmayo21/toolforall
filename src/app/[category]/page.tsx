@@ -6,6 +6,7 @@ import { getToolsByCategory } from "@/lib/tools-data";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/analytics/JsonLd";
 import CategoryTracker from "@/components/analytics/CategoryTracker";
+import AdSlot from "@/components/AdSlot";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -75,6 +76,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           </Link>
         ))}
       </div>
+
+      <AdSlot slot="hero" />
 
       <section className="mt-16">
         <h2 className="text-lg font-bold text-text-primary">Other Categories</h2>
