@@ -9,6 +9,8 @@ import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import ClarityAnalytics from "@/components/analytics/Clarity";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 
 
 export const metadata: Metadata = {
@@ -53,7 +55,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </I18nProvider>
           <Analytics />
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
-          <ClarityAnalytics />
+          <ClarityAnalytics />  
+          <SpeedInsights />
         </ThemeProvider>
       </body>
     </html>
