@@ -6,6 +6,7 @@ import ToolPageTemplate from "@/components/ToolPageTemplate";
 import UnitPairTool from "@/components/tools/unit-pair-tool";
 import PopularTool from "@/components/tools/popular-tools";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { hreflangs, langsForTool } from "@/lib/i18n/content";
 
 export function generateStaticParams() {
   return ALL_TOOLS.map((t) => ({ category: t.category, slug: t.slug }));
@@ -25,7 +26,7 @@ export async function generateMetadata({
     description: tool.metaDescription,
     keywords: tool.keywords,
     robots: { index: true, follow: true },
-    alternates: { canonical: `${SITE_URL}/${category}/${slug}` },
+    alternates: { canonical: `${SITE_URL}/${category}/${slug}`, languages: hreflangs(`/${category}/${slug}`, langsForTool(slug)) },
     openGraph: {
       title: `${tool.title} | ${SITE_NAME}`,
       description: tool.metaDescription,

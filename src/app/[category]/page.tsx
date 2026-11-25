@@ -8,6 +8,7 @@ import JsonLd from "@/components/analytics/JsonLd";
 import CategoryTracker from "@/components/analytics/CategoryTracker";
 import AdSlot from "@/components/AdSlot";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { hreflangs, allLangs } from "@/lib/i18n/content";
 
 export function generateStaticParams() {
   return CATEGORIES.map((c) => ({ category: c.key }));
@@ -26,7 +27,7 @@ export async function generateMetadata({
     title,
     description: category.description,
     robots: { index: true, follow: true },
-    alternates: { canonical: `${SITE_URL}/${key}` },
+    alternates: { canonical: `${SITE_URL}/${key}`, languages: hreflangs(`/${key}`, [...allLangs]) },
     openGraph: { title: `${title} | ${SITE_NAME}`, description: category.description, url: `${SITE_URL}/${key}` },
   };
 }
