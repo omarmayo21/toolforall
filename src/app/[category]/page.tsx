@@ -62,8 +62,32 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         {tools.length} free tools · No sign-up required · Runs in your browser
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {tools.map((tool) => (
+      {category.key === "unit-converters" ? (
+        <div className="mt-8 space-y-8">
+          {Object.entries(
+            tools.reduce<Record<string, typeof tools>>((acc, t) => {
+              const fam = t.componentKey.split(":")[1] ?? "other";
+              (acc[fam] ||= []).push(t);
+              return acc;
+            }, {})
+          ).map(([fam, list]) => (
+            <section key={fam}>
+              <h2 className="text-lg font-bold capitalize text-text-primary">{fam.replace("-", " ")} converters ({list.length})</h2>
+              <ul className="mt-3 flex flex-wrap gap-2">
+                {list.map((t) => (
+                  <li key={t.slug}>
+                    <Link href={`/${category.key}/${t.slug}`} className="block rounded-lg border border-border-default bg-surface-default px-3 py-1.5 text-sm text-text-secondary hover:border-primary-400 hover:text-primary-600">
+                      {t.slug.replace(/-to-/, " to ").replace(/-/g, " ")}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      ) : null}
+      <div className={category.key === "unit-converters" ? "hidden" : "mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"}>
+        {(category.key === "unit-converters" ? [] : tools).map((tool) => (
           <Link
             key={tool.slug}
             href={`/${category.key}/${tool.slug}`}

@@ -9,6 +9,7 @@ import { colorTools } from "./data/color-tools";
 import { mathTools } from "./data/math-tools";
 import { securityTools } from "./data/security-tools";
 import { unitTools } from "./generated/units";
+import { popularTools } from "./generated/popular";
 
 export const ALL_TOOLS: ToolMeta[] = [
   ...developerTools,
@@ -21,6 +22,7 @@ export const ALL_TOOLS: ToolMeta[] = [
   ...mathTools,
   ...securityTools,
   ...unitTools,
+  ...popularTools,
 ];
 
 export function getToolsByCategory(category: CategoryKey): ToolMeta[] {
