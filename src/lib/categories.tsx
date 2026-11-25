@@ -1,5 +1,5 @@
 import type { CategoryKey } from "./types";
-import { Code, LineChart, Image as ImageIcon, FileText, File, Sparkles, Palette, Calculator, Shield, Ruler } from "lucide-react";
+import { Code, LineChart, Image as ImageIcon, FileText, File, Sparkles, Palette, Calculator, Shield } from "lucide-react";
 import type { ReactNode } from "react";
 
 export interface CategoryDef {
@@ -66,13 +66,6 @@ export const CATEGORIES: CategoryDef[] = [
     titleAr: "الحاسبات والتحويلات",
     description: "Calculators and unit converters for everyday math problems.",
     icon: <Calculator size="1em" strokeWidth={2.5} />,
-  },
-  {
-    key: "unit-converters",
-    title: "Unit Converters",
-    titleAr: "محولات الوحدات",
-    description: "Convert length, weight, volume, area, speed, data, time, temperature and more between any units.",
-    icon: <Ruler size="1em" strokeWidth={2.5} />,
   },
   {
     key: "security-tools",
