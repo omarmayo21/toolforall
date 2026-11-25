@@ -45,6 +45,7 @@ export default function Header() {
         {/* Mobile controls */}
         <div className="flex flex-1 items-center justify-end gap-2 md:hidden">
           <ThemeToggle />
+          <LanguageToggle />
           <button
             className="grid h-11 w-11 place-items-center rounded-md text-text-secondary transition-colors hover:bg-surface-100 hover:text-text-primary dark:hover:bg-surface-800"
             onClick={() => setOpen((v) => !v)}
@@ -81,9 +82,6 @@ export default function Header() {
               );
             })}
           </nav>
-          <div className="flex items-center justify-center border-t border-border-default/50 pt-4">
-            <LanguageToggle />
-          </div>
         </div>
       )}
     </header>
