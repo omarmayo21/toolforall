@@ -6,7 +6,7 @@ export type Lang = "en" | "ar";
 
 const dict = {
   en: {
-    searchPlaceholder: "Search 100+ free tools…",
+    searchPlaceholder: "Search free tools…",
     allCategories: "All Categories",
     home: "Home",
     relatedTools: "Related Tools",
@@ -17,15 +17,15 @@ const dict = {
     share: "Share",
     clear: "Clear",
     noResults: "No tools found. Try another keyword.",
-    freeNoSignup: "100% Free · No Sign-up · Works in your browser",
+    freeNoSignup: "100% Free · No Sign-up · Most tools run in your browser",
     viewAll: "View all",
     tagline: "Every tool you need, for free — no account required.",
     footerRights: "All rights reserved.",
-    footerTag: "Free online tools. No sign-up. No limits.",
+    footerTag: "Free online tools. No sign-up needed.",
     tryTool: "Try the tool below — free, instant, no sign-up.",
   },
   ar: {
-    searchPlaceholder: "ابحث في أكثر من 100 أداة مجانية…",
+    searchPlaceholder: "ابحث في الأدوات المجانية…",
     allCategories: "كل الفئات",
     home: "الرئيسية",
     relatedTools: "أدوات ذات صلة",
@@ -36,11 +36,11 @@ const dict = {
     share: "مشاركة",
     clear: "مسح",
     noResults: "لا توجد أدوات مطابقة. جرّب كلمة أخرى.",
-    freeNoSignup: "مجاني 100% · بدون تسجيل · يعمل داخل المتصفح",
+    freeNoSignup: "مجاني 100% · بدون تسجيل · معظم الأدوات تعمل داخل المتصفح",
     viewAll: "عرض الكل",
     tagline: "كل أداة تحتاجها، مجانًا — بدون حساب.",
     footerRights: "جميع الحقوق محفوظة.",
-    footerTag: "أدوات مجانية عبر الإنترنت. بدون تسجيل. بدون حدود.",
+    footerTag: "أدوات مجانية عبر الإنترنت. بدون تسجيل.",
     tryTool: "جرّب الأداة أدناه — مجانية وفورية وبدون تسجيل.",
   },
 } as const;

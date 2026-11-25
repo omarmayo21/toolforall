@@ -6,6 +6,9 @@ import { I18nProvider } from "@/lib/i18n";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
+import { TOOL_COUNT_LABEL } from "@/lib/counts";
+
+const HOME_TITLE = `${SITE_NAME}: ${TOOL_COUNT_LABEL} Free Online Tools`;
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import ClarityAnalytics from "@/components/analytics/Clarity";
@@ -15,29 +18,20 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE_NAME} — 100+ Free Online Tools`, template: `%s | ${SITE_NAME}` },
+  title: { default: HOME_TITLE, template: `%s | ${SITE_NAME}` },
   description: SITE_DESCRIPTION,
   openGraph: {
-    title: `${SITE_NAME} — 100+ Free Online Tools`,
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
     siteName: SITE_NAME,
     url: SITE_URL,
     type: "website",
     locale: "en_US",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "ToolForAll – 100+ Free Online Tools",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — 100+ Free Online Tools`,
+    title: HOME_TITLE,
     description: SITE_DESCRIPTION,
-    images: ["/og-image.png"],
   },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },

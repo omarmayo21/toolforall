@@ -18,7 +18,7 @@ import type { ComponentRegistry } from "@/lib/types";
 /* ---------------- Meta Tag Generator ---------------- */
 export function MetaTagGenerator() {
   const [title, setTitle] = useState("ToolForAll — Free Online Tools");
-  const [desc, setDesc] = useState("100+ free browser-based tools for developers, marketers and designers.");
+  const [desc, setDesc] = useState("Free browser-based tools for developers, marketers and designers.");
   const [keywords, setKeywords] = useState("free tools, online tools, developer tools");
   const [author, setAuthor] = useState("");
 
@@ -140,7 +140,7 @@ export function SitemapGenerator() {
 /* ---------------- Open Graph Tag Generator ---------------- */
 export function OgTagGenerator() {
   const [title, setTitle] = useState("ToolForAll — Free Online Tools");
-  const [desc, setDesc] = useState("100+ free browser-based tools for developers and marketers.");
+  const [desc, setDesc] = useState("Free browser-based tools for developers and marketers.");
   const [url, setUrl] = useState("https://example.com/");
   const [image, setImage] = useState("https://example.com/og-image.jpg");
   const [site, setSite] = useState("ToolForAll");
@@ -174,7 +174,7 @@ export function OgTagGenerator() {
 export function TwitterCardGenerator() {
   const [card, setCard] = useState("summary_large_image");
   const [title, setTitle] = useState("ToolForAll — Free Online Tools");
-  const [desc, setDesc] = useState("100+ free browser-based tools, no sign-up required.");
+  const [desc, setDesc] = useState("Free browser-based tools, no sign-up required.");
   const [image, setImage] = useState("https://example.com/card.jpg");
   const [handle, setHandle] = useState("@toolforall");
 
@@ -312,7 +312,7 @@ export function KeywordDensityChecker() {
 
 /* ---------------- SERP Preview ---------------- */
 export function SerpPreview() {
-  const [title, setTitle] = useState("ToolForAll — 100+ Free Online Tools");
+  const [title, setTitle] = useState("ToolForAll: Free Online Tools");
   const [url, setUrl] = useState("https://toolforall.com");
   const [desc, setDesc] = useState("Free browser-based tools for developers, designers and marketers. No sign-up, no limits, 100% free forever.");
 
@@ -570,7 +570,7 @@ export function SeoAnalyzer() {
   <link rel="canonical" href="https://toolforall.com">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="ToolForAll Suite">
-  <meta property="og:description" content="200+ Free Online Tools">
+  <meta property="og:description" content="Free Online Tools">
   <meta property="og:image" content="https://toolforall.com/og.jpg">
 </head>
 <body>
@@ -2047,7 +2047,7 @@ export function FaqSchemaValidator() {
       "name": "Are the tools completely free?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes, all 200+ tools run directly in your browser with zero subscription or sign-up required."
+        "text": "Yes, the tools are free to use, with no subscription or sign-up required."
       }
     }
   ]
@@ -2708,7 +2708,7 @@ export function UtmUrlBuilder() {
 
 /* ---------------- 36. OG Image Preview ---------------- */
 export function OgImagePreview() {
-  const [title, setTitle] = useState("ToolForAll — 200+ Free Online Web & Developer Tools");
+  const [title, setTitle] = useState("ToolForAll: Free Online Web & Developer Tools");
   const [desc, setDesc] = useState("Explore lightning-fast, private browser utilities for developers, designers, and marketers.");
   const [image, setImage] = useState("https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&h=630&q=80");
   const [site, setSite] = useState("toolforall.com");
