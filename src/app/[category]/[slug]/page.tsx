@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ALL_TOOLS, getTool } from "@/lib/tools-data";
 import { TOOL_REGISTRY } from "@/components/tools/registry";
 import ToolPageTemplate from "@/components/ToolPageTemplate";
+import UnitPairTool from "@/components/tools/unit-pair-tool";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function generateStaticParams() {
@@ -47,7 +48,9 @@ export default async function ToolPage({
   const tool = getTool(category, slug);
   if (!tool) notFound();
 
-  const Component = TOOL_REGISTRY[tool.componentKey];
+  const Component = tool.componentKey.startsWith("Unit:")
+    ? () => <UnitPairTool toolKey={tool.componentKey} />
+    : TOOL_REGISTRY[tool.componentKey];
   if (!Component) notFound();
 
   return <ToolPageTemplate tool={tool} Component={Component} />;

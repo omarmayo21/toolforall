@@ -9,7 +9,8 @@ export type CategoryKey =
   | "ai-tools"
   | "color-tools"
   | "math-converters"
-  | "security-tools";
+  | "security-tools"
+  | "unit-converters";
 
 export interface FAQItem {
   q: string;
@@ -26,6 +27,7 @@ export interface ToolMeta {
   componentKey: string;
   article: string;
   faqs: FAQItem[];
+  related?: string[];
 }
 
 export type ComponentRegistry = Record<string, ComponentType>;
