@@ -6,11 +6,12 @@ import SearchBar from "@/components/layout/SearchBar";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import JsonLd from "@/components/analytics/JsonLd";
 import AdSlot from "@/components/AdSlot";
+import { hreflangs, allLangs } from "@/lib/i18n/content";
 
 export const metadata: Metadata = {
   title: `${SITE_NAME} — 100+ Free Online Tools for Developers, Designers & Marketers`,
   description: SITE_DESCRIPTION,
-  alternates: { canonical: SITE_URL },
+  alternates: { canonical: SITE_URL, languages: hreflangs("/", [...allLangs]) },
 };
 
 export default function HomePage() {

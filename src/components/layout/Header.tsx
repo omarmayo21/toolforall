@@ -14,14 +14,14 @@ import { Menu, X } from "lucide-react";
 const CategoryDropdown = dynamic(() => import("./CategoryDropdown"));
 
 export default function Header() {
-  const { lang } = useI18n();
+  const { href, catTitle } = useI18n();
   const [open, setOpen] = useState(false);
   const pathname = usePathname() || "";
 
   return (
     <header className="sticky top-0 z-40 border-b border-border-default/50 bg-bg-default/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3 sm:px-6">
-        <Link href="/" aria-label="ToolForAll Home" title="ToolForAll Home" className="flex shrink-0 items-center gap-2.5 text-lg font-extrabold text-text-primary transition-opacity hover:opacity-80">
+        <Link href={href("/")} aria-label="ToolForAll Home" title="ToolForAll Home" className="flex shrink-0 items-center gap-2.5 text-lg font-extrabold text-text-primary transition-opacity hover:opacity-80">
           <LogoIcon className="h-8 w-8" aria-hidden="true" />
           <span className="hidden sm:inline-block">ToolForAll</span>
         </Link>
@@ -61,11 +61,11 @@ export default function Header() {
           <SearchBar />
           <nav className="flex flex-col gap-1">
             {CATEGORIES.map((c) => {
-              const isActive = pathname.startsWith(`/${c.key}`);
+              const isActive = pathname.startsWith(href(`/${c.key}`));
               return (
                 <Link 
                   key={c.key} 
-                  href={`/${c.key}`} 
+                  href={href(`/${c.key}`)} 
                   onClick={() => setOpen(false)} 
                   className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                     isActive 
@@ -76,7 +76,7 @@ export default function Header() {
                   <span className="flex h-8 w-8 items-center justify-center rounded-md bg-surface-100 text-text-primary dark:bg-surface-800">
                     {c.icon}
                   </span>
-                  {lang === "ar" ? c.titleAr : c.title}
+                  {catTitle(c)}
                 </Link>
               );
             })}

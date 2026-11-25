@@ -1,93 +1,44 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { type Lang, dirOf, langFromPath, lp } from "@/lib/i18n/config";
+import { UI, CAT, type UiKey } from "@/lib/i18n/ui";
+import type { CategoryDef } from "@/lib/categories";
 
-export type Lang = "en" | "ar";
-
-const dict = {
-  en: {
-    searchPlaceholder: "Search 100+ free tools…",
-    allCategories: "All Categories",
-    home: "Home",
-    relatedTools: "Related Tools",
-    faq: "Frequently Asked Questions",
-    copy: "Copy",
-    copied: "Copied!",
-    download: "Download",
-    share: "Share",
-    clear: "Clear",
-    noResults: "No tools found. Try another keyword.",
-    freeNoSignup: "100% Free · No Sign-up · Works in your browser",
-    viewAll: "View all",
-    tagline: "Every tool you need, for free — no account required.",
-    footerRights: "All rights reserved.",
-    footerTag: "Free online tools. No sign-up. No limits.",
-    tryTool: "Try the tool below — free, instant, no sign-up.",
-  },
-  ar: {
-    searchPlaceholder: "ابحث في أكثر من 100 أداة مجانية…",
-    allCategories: "كل الفئات",
-    home: "الرئيسية",
-    relatedTools: "أدوات ذات صلة",
-    faq: "الأسئلة الشائعة",
-    copy: "نسخ",
-    copied: "تم النسخ!",
-    download: "تحميل",
-    share: "مشاركة",
-    clear: "مسح",
-    noResults: "لا توجد أدوات مطابقة. جرّب كلمة أخرى.",
-    freeNoSignup: "مجاني 100% · بدون تسجيل · يعمل داخل المتصفح",
-    viewAll: "عرض الكل",
-    tagline: "كل أداة تحتاجها، مجانًا — بدون حساب.",
-    footerRights: "جميع الحقوق محفوظة.",
-    footerTag: "أدوات مجانية عبر الإنترنت. بدون تسجيل. بدون حدود.",
-    tryTool: "جرّب الأداة أدناه — مجانية وفورية وبدون تسجيل.",
-  },
-} as const;
-
-export type DictKey = keyof typeof dict.en;
+export type { Lang };
+export type DictKey = UiKey;
 
 interface I18nContextValue {
   lang: Lang;
   dir: "ltr" | "rtl";
   t: (key: DictKey) => string;
-  setLang: (lang: Lang) => void;
+  /** Prefix a site path with the current language ("/finance" -> "/es/finance"). */
+  href: (path: string) => string;
+  catTitle: (c: CategoryDef) => string;
 }
 
-const I18nContext = createContext<I18nContextValue>({
-  lang: "en",
-  dir: "ltr",
-  t: (key) => dict.en[key],
-  setLang: () => {},
-});
+const I18nContext = createContext<I18nContextValue>({ lang: "en", dir: "ltr", t: (k) => UI.en[k], href: (p) => p, catTitle: (c) => c.title });
 
+/** The language comes from the URL (/es/..., /ar/...), so server HTML is already in the right language and direction. */
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en");
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem("tfa-lang") as Lang | null;
-    if (stored) setLangState(stored);
-  }, []);
-
+  const lang = langFromPath(usePathname() || "/");
+  const dir = dirOf(lang);
   useEffect(() => {
     document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    window.localStorage.setItem("tfa-lang", lang);
-  }, [lang]);
-
+    document.documentElement.dir = dir;
+  }, [lang, dir]);
   const value: I18nContextValue = {
-    lang,
-    dir: lang === "ar" ? "rtl" : "ltr",
-    t: (key) => dict[lang][key],
-    setLang: (newLang) => {
-      import("@/lib/analytics").then(({ trackEvent }) => {
-        trackEvent("language_change", { language: newLang });
-      });
-      setLangState(newLang);
-    },
+    lang, dir,
+    t: (key) => UI[lang][key],
+    href: (path) => lp(lang, path),
+    catTitle: (c) => (lang === "en" ? c.title : CAT[lang][c.key as keyof (typeof CAT)["es"]]?.[0] ?? c.title),
   };
-
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+  return (
+    <I18nContext.Provider value={value}>
+      <div lang={lang} dir={dir} className="contents">{children}</div>
+    </I18nContext.Provider>
+  );
 }
 
 export function useI18n() {
