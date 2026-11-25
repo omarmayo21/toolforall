@@ -18,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE_URL}/${t.category}/${t.slug}`,
     lastModified: now,
     changeFrequency: "monthly",
-    priority: t.category === "unit-converters" ? 0.5 : 0.7,
+    priority: 0.7,
   }));
 
   return [...homeEntry, ...categoryEntries, ...toolEntries];
