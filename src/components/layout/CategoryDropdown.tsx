@@ -12,7 +12,7 @@ export default function CategoryDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname() || "";
-  const { lang, t } = useI18n();
+  const { t, href, catTitle } = useI18n();
 
   // Close on outside click
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function CategoryDropdown() {
   }, [isOpen]);
 
   // Translate label safely
-  const label = lang === "ar" ? "الفئات" : "Categories";
+  const label = t("categories");
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -72,7 +72,7 @@ export default function CategoryDropdown() {
               return (
                 <Link
                   key={c.key}
-                  href={`/${c.key}`}
+                  href={href(`/${c.key}`)}
                   onClick={() => setIsOpen(false)}
                   role="menuitem"
                   className={`group relative flex items-start gap-3 rounded-lg p-2.5 outline-none transition-colors focus:bg-surface-100 dark:focus:bg-surface-800 ${
@@ -89,7 +89,7 @@ export default function CategoryDropdown() {
                   </div>
                   <div className="flex-1">
                     <div className={`text-sm font-semibold ${isActive ? "text-primary-700 dark:text-primary-300" : "text-text-primary"}`}>
-                      {lang === "ar" ? c.titleAr : c.title}
+                      {catTitle(c)}
                     </div>
                     <div className="mt-0.5 text-xs text-text-muted line-clamp-2 leading-relaxed">
                       {c.description}

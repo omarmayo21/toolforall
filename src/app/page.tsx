@@ -7,11 +7,12 @@ import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import JsonLd from "@/components/analytics/JsonLd";
 import AdSlot from "@/components/AdSlot";
 import { TOOL_COUNT_LABEL } from "@/lib/counts";
+import { hreflangs, allLangs } from "@/lib/i18n/content";
 
 export const metadata: Metadata = {
   title: { absolute: `${SITE_NAME}: ${TOOL_COUNT_LABEL} Free Online Tools for Developers, Designers & More` },
   description: SITE_DESCRIPTION,
-  alternates: { canonical: SITE_URL },
+  alternates: { canonical: SITE_URL, languages: hreflangs("/", [...allLangs]) },
 };
 
 export default function HomePage() {
