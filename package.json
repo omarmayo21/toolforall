@@ -30,11 +30,13 @@
     "diff": "^9.0.0",
     "dotenv": "17.3.1",
     "file-saver": "^2.0.5",
+    "heic2any": "^0.0.4",
     "js-yaml": "^5.2.2",
     "jsbarcode": "^3.12.3",
     "jszip": "^3.10.1",
     "lucide-react": "^1.28.0",
     "marked": "^18.0.7",
+    "mermaid": "^12.3.0",
     "next": "16.2.6",
     "papaparse": "^5.5.4",
     "pdf-lib": "^1.17.1",
@@ -43,6 +45,7 @@
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "sql-formatter": "^15.8.2",
+    "tesseract.js": "^7.0.0",
     "turndown": "^7.2.4"
   },
   "devDependencies": {
