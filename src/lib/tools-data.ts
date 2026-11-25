@@ -16,6 +16,7 @@ import { wave3Tools } from "./generated/wave3";
 import { wave4Tools } from "./generated/wave4";
 import { wave5Tools } from "./generated/wave5";
 import { wave6Tools } from "./generated/wave6";
+import { wave7Tools } from "./generated/wave7";
 
 export const ALL_TOOLS: ToolMeta[] = [
   ...developerTools,
@@ -35,6 +36,7 @@ export const ALL_TOOLS: ToolMeta[] = [
   ...wave4Tools,
   ...wave5Tools,
   ...wave6Tools,
+  ...wave7Tools,
 ];
 
 export function getToolsByCategory(category: CategoryKey): ToolMeta[] {
