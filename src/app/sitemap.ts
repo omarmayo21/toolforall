@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const out: MetadataRoute.Sitemap = [entry(SITE_URL, "daily", 1, "/", allLangs)];
   for (const l of allLangs) out.push(entry(`${SITE_URL}/${l}`, "daily", 0.9, "/", allLangs));
+  for (const pg of ["about", "privacy", "terms"]) out.push(entry(`${SITE_URL}/${pg}`, "monthly", 0.3, `/${pg}`, []));
   for (const c of CATEGORIES) {
     out.push(entry(`${SITE_URL}/${c.key}`, "weekly", 0.8, `/${c.key}`, allLangs));
     for (const l of allLangs) out.push(entry(`${SITE_URL}/${l}/${c.key}`, "weekly", 0.7, `/${c.key}`, allLangs));
