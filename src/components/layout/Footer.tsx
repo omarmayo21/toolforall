@@ -35,7 +35,12 @@ export default function Footer() {
             </Link>
           ))}
         </div>
-        <p className="mt-6 text-xs text-text-secondary">
+        <div className="mt-6 flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-secondary">
+          <Link href="/about" className="py-1.5 hover:text-primary-600">About</Link>
+          <Link href="/privacy" className="py-1.5 hover:text-primary-600">Privacy Policy</Link>
+          <Link href="/terms" className="py-1.5 hover:text-primary-600">Terms</Link>
+        </div>
+        <p className="mt-2 text-xs text-text-secondary">
           © {new Date().getFullYear()} ToolForAll. {t("footerRights")} {t("footerTag")}
         </p>
       </div>
