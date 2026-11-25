@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ToolMeta } from "@/lib/types";
 import { getCategory } from "@/lib/categories";
 import { getRelatedTools } from "@/lib/tools-data";
-import { SITE_URL } from "@/lib/site";
+import { SITE_URL, NETWORK_TOOLS } from "@/lib/site";
 import Breadcrumbs from "./layout/Breadcrumbs";
 import AdSlot from "./AdSlot";
 import JsonLd from "./analytics/JsonLd";
@@ -52,7 +52,7 @@ export default function ToolPageTemplate({ tool, Component }: { tool: ToolMeta; 
       <h1 className="text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">{tool.title}</h1>
       <p className="mt-2 max-w-3xl text-text-secondary">{tool.shortDescription}</p>
       <p className="mt-1 text-xs font-medium uppercase tracking-wide text-primary-500 dark:text-primary-400">
-        100% Free · No Sign-up · Runs in Your Browser
+        {NETWORK_TOOLS.has(tool.slug) ? "100% Free · No Sign-up · Uses a live lookup" : "100% Free · No Sign-up · Runs in Your Browser"}
       </p>
 
       <AdSlot slot="hero" />

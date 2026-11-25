@@ -59,7 +59,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       </div>
 
       <p className="mt-4 text-sm font-medium text-primary-500 dark:text-primary-400">
-        {tools.length} free tools · No sign-up required · Runs in your browser
+        {tools.length} free tools · No sign-up required
       </p>
 
       {category.key === "unit-converters" ? (

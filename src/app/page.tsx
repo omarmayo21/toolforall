@@ -1,14 +1,15 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { CATEGORIES } from "@/lib/categories";
-import { getToolsByCategory, ALL_TOOLS } from "@/lib/tools-data";
+import { getToolsByCategory } from "@/lib/tools-data";
 import SearchBar from "@/components/layout/SearchBar";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/site";
 import JsonLd from "@/components/analytics/JsonLd";
 import AdSlot from "@/components/AdSlot";
+import { TOOL_COUNT_LABEL } from "@/lib/counts";
 
 export const metadata: Metadata = {
-  title: `${SITE_NAME} — 100+ Free Online Tools for Developers, Designers & Marketers`,
+  title: { absolute: `${SITE_NAME}: ${TOOL_COUNT_LABEL} Free Online Tools for Developers, Designers & More` },
   description: SITE_DESCRIPTION,
   alternates: { canonical: SITE_URL },
 };
@@ -49,14 +50,14 @@ export default function HomePage() {
 
       <section className="bg-gradient-to-b from-indigo-50 to-white px-4 py-16 text-center dark:from-slate-900 dark:to-slate-950 sm:px-6">
         <p className="text-sm font-semibold uppercase tracking-wide text-indigo-600 dark:text-indigo-400">
-          100% Free · No Sign-up · {ALL_TOOLS.length}+ Tools
+          100% Free · No Sign-up · {TOOL_COUNT_LABEL} Tools
         </p>
         <h1 className="mx-auto mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
           Every Online Tool You Need, For Free
         </h1>
         <p className="mx-auto mt-4 max-w-2xl text-slate-600 dark:text-slate-400">
-          ToolForAll gives developers, designers, marketers and students {ALL_TOOLS.length}+ fast, private, browser-based
-          tools — no registration, no limits, no catch.
+          ToolForAll gives developers, designers, marketers and students {TOOL_COUNT_LABEL} free tools and converters for PDF, images,
+          text, SEO, finance and more. No registration needed, and most tools run in your browser.
         </p>
         <div className="mx-auto mt-8 flex justify-center">
           <SearchBar variant="hero" />
