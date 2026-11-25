@@ -8,6 +8,7 @@ import { aiTools } from "./data/ai-tools";
 import { colorTools } from "./data/color-tools";
 import { mathTools } from "./data/math-tools";
 import { securityTools } from "./data/security-tools";
+import { unitTools } from "./generated/units";
 
 export const ALL_TOOLS: ToolMeta[] = [
   ...developerTools,
@@ -19,6 +20,7 @@ export const ALL_TOOLS: ToolMeta[] = [
   ...colorTools,
   ...mathTools,
   ...securityTools,
+  ...unitTools,
 ];
 
 export function getToolsByCategory(category: CategoryKey): ToolMeta[] {
@@ -30,6 +32,12 @@ export function getTool(category: string, slug: string): ToolMeta | undefined {
 }
 
 export function getRelatedTools(tool: ToolMeta, count = 6): ToolMeta[] {
+  if (tool.related?.length) {
+    const found = tool.related
+      .map((slug) => getTool(tool.category, slug))
+      .filter((t): t is ToolMeta => !!t);
+    if (found.length) return found.slice(0, count);
+  }
   return getToolsByCategory(tool.category)
     .filter((t) => t.slug !== tool.slug)
     .slice(0, count);
