@@ -10,6 +10,7 @@ import { mathTools } from "./data/math-tools";
 import { securityTools } from "./data/security-tools";
 import { unitTools } from "./generated/units";
 import { popularTools } from "./generated/popular";
+import { wave1Tools } from "./generated/wave1";
 
 export const ALL_TOOLS: ToolMeta[] = [
   ...developerTools,
@@ -23,6 +24,7 @@ export const ALL_TOOLS: ToolMeta[] = [
   ...securityTools,
   ...unitTools,
   ...popularTools,
+  ...wave1Tools,
 ];
 
 export function getToolsByCategory(category: CategoryKey): ToolMeta[] {
