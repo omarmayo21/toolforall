@@ -8,6 +8,8 @@ import { WAVE1 } from "./wave1-tools";
 import { WAVE2 } from "./wave2-tools";
 import { WAVE3 } from "./wave3-tools";
 import { WAVE4 } from "./wave4-tools";
+import { WAVE5 } from "./wave5-tools";
+import { WAVE6 } from "./wave6-tools";
 
 /* ---------- calculators ---------- */
 const Emi = () => (
@@ -475,7 +477,7 @@ const TimeZone = () => {
 
 export const POPULAR: Record<string, () => ReactNode> = {
   ...WAVE1,
-  ...WAVE2, ...WAVE3, ...WAVE4,
+  ...WAVE2, ...WAVE3, ...WAVE4, ...WAVE5, ...WAVE6,
   "loan-emi-calculator": () => <Emi />, "mortgage-calculator": () => <Mortgage />, "compound-interest-calculator": () => <Compound />, "simple-interest-calculator": () => <Simple />,
   "tip-calculator": () => <Tip />, "vat-calculator": () => <Vat />, "hourly-to-salary-calculator": () => <Salary />, "days-between-dates-calculator": () => <DaysBetween />,
   "date-calculator": () => <DateAdd />, "calorie-calculator": () => <Bmr />, "ideal-weight-calculator": () => <IdealWeight />, "roi-calculator": () => <Roi />, "cagr-calculator": () => <Cagr />,
