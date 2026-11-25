@@ -5,6 +5,7 @@ import { Alert, Button, CopyButton, Field, OutputBox, Select, StatBadge, TextAre
 
 import { Calc, TextXform, money, num, N, type Row } from "./calc-kit";
 import { WAVE1 } from "./wave1-tools";
+import { WAVE2 } from "./wave2-tools";
 
 /* ---------- calculators ---------- */
 const Emi = () => (
@@ -472,6 +473,7 @@ const TimeZone = () => {
 
 export const POPULAR: Record<string, () => ReactNode> = {
   ...WAVE1,
+  ...WAVE2,
   "loan-emi-calculator": () => <Emi />, "mortgage-calculator": () => <Mortgage />, "compound-interest-calculator": () => <Compound />, "simple-interest-calculator": () => <Simple />,
   "tip-calculator": () => <Tip />, "vat-calculator": () => <Vat />, "hourly-to-salary-calculator": () => <Salary />, "days-between-dates-calculator": () => <DaysBetween />,
   "date-calculator": () => <DateAdd />, "calorie-calculator": () => <Bmr />, "ideal-weight-calculator": () => <IdealWeight />, "roi-calculator": () => <Roi />, "cagr-calculator": () => <Cagr />,
