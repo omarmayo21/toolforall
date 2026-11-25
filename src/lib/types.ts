@@ -10,7 +10,12 @@ export type CategoryKey =
   | "color-tools"
   | "math-converters"
   | "security-tools"
-  | "unit-converters";
+  | "unit-converters"
+  | "finance"
+  | "health-fitness"
+  | "date-time"
+  | "education"
+  | "fun-random";
 
 export interface FAQItem {
   q: string;

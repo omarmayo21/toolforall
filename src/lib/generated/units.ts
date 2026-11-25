@@ -1,4 +1,4 @@
-import type { ToolMeta } from "../types";
+import type { CategoryKey, ToolMeta } from "../types";
 
 /**
  * Programmatic unit converter pages.
@@ -181,16 +181,103 @@ export function fmt(n: number): string {
   return s;
 }
 
-export const UNIT_CATEGORY = "unit-converters" as const;
-const SAMPLES = [1, 2, 5, 10, 25, 50, 100, 1000];
 
-const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const SAMPLES = [1, 2, 5, 10, 25, 50, 100, 1000];
+const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 export function pairKey(fam: string, from: string, to: string) {
   return `Unit:${fam}:${from}:${to}`;
 }
 
-function buildTool(fam: FamilyDef, from: UnitDef, to: UnitDef): ToolMeta {
+/** Families that belong with developer tools; everything else lives under Math & Converters. */
+const DEV_FAMILIES = new Set(["data", "data-rate", "frequency"]);
+export const familyCategory = (fam: string): CategoryKey => (DEV_FAMILIES.has(fam) ? "developer-tools" : "math-converters");
+
+/**
+ * Only pairs people actually search for. Each entry is "from:to" and is built in BOTH directions.
+ * Everything else is intentionally not generated (no demand, near-duplicate content).
+ */
+export const DEMAND_PAIRS: Record<string, string[]> = {
+  length: ["centimeters:inches", "meters:feet", "kilometers:miles", "millimeters:inches", "inches:feet", "meters:yards", "feet:centimeters", "feet:yards", "miles:feet", "kilometers:meters", "centimeters:meters", "millimeters:centimeters", "meters:inches", "nautical-miles:kilometers", "miles:meters", "inches:millimeters", "yards:feet", "micrometers:millimeters"],
+  weight: ["kilograms:pounds", "grams:ounces", "pounds:ounces", "kilograms:ounces", "kilograms:grams", "milligrams:grams", "stone:pounds", "stone:kilograms", "metric-tons:kilograms", "pounds:grams", "carats:grams", "metric-tons:pounds", "us-tons:kilograms"],
+  volume: ["liters:us-gallons", "milliliters:us-fluid-ounces", "liters:milliliters", "us-cups:milliliters", "tablespoons:milliliters", "teaspoons:milliliters", "us-cups:us-fluid-ounces", "tablespoons:teaspoons", "us-gallons:us-quarts", "us-quarts:liters", "us-pints:milliliters", "uk-gallons:liters", "us-gallons:uk-gallons", "cubic-meters:liters", "oil-barrels:liters", "us-cups:tablespoons", "us-gallons:milliliters"],
+  area: ["square-feet:square-meters", "acres:hectares", "acres:square-feet", "square-kilometers:square-miles", "hectares:square-meters", "feddans:square-meters", "feddans:acres", "feddans:hectares", "square-inches:square-centimeters", "square-miles:acres", "square-kilometers:hectares", "square-yards:square-feet", "square-meters:square-yards", "acres:square-meters"],
+  speed: ["kilometers-per-hour:miles-per-hour", "meters-per-second:kilometers-per-hour", "knots:kilometers-per-hour", "knots:miles-per-hour", "meters-per-second:miles-per-hour", "feet-per-second:miles-per-hour"],
+  data: ["megabytes:gigabytes", "gigabytes:terabytes", "kilobytes:megabytes", "megabytes:kilobytes", "gigabytes:megabytes", "terabytes:megabytes", "bytes:kilobytes", "bits:bytes", "gigabytes:gibibytes", "megabytes:mebibytes", "petabytes:terabytes", "terabytes:gigabytes", "gibibytes:mebibytes", "kilobytes:kibibytes", "bytes:megabytes", "gigabytes:kilobytes"],
+  "data-rate": ["megabits-per-second:megabytes-per-second", "gigabits-per-second:megabytes-per-second", "kilobits-per-second:kilobytes-per-second", "megabits-per-second:kilobits-per-second", "gigabits-per-second:megabits-per-second", "megabytes-per-second:gigabytes-per-second"],
+  time: ["hours:minutes", "minutes:seconds", "days:hours", "weeks:days", "years:days", "months:days", "hours:seconds", "days:minutes", "milliseconds:seconds", "weeks:hours", "years:weeks", "days:seconds", "years:months", "years:hours", "microseconds:milliseconds"],
+  pressure: ["psi:bar", "bar:pascals", "atmospheres:pascals", "psi:kilopascals", "mmhg:kilopascals", "atmospheres:psi", "bar:atmospheres", "kilopascals:pascals", "psi:pascals", "torr:pascals", "mmhg:atmospheres", "millibars:pascals"],
+  energy: ["kilocalories:kilojoules", "calories:joules", "kilowatt-hours:kilocalories", "watt-hours:joules", "btu:joules", "kilojoules:joules", "kilocalories:calories", "kilowatt-hours:watt-hours", "btu:kilowatt-hours", "kilowatt-hours:kilojoules", "foot-pounds:joules"],
+  power: ["kilowatts:horsepower", "horsepower:watts", "kilowatts:watts", "megawatts:kilowatts", "metric-horsepower:horsepower", "horsepower:btu-per-hour", "metric-horsepower:kilowatts", "btu-per-hour:watts"],
+  frequency: ["hertz:kilohertz", "megahertz:gigahertz", "kilohertz:megahertz", "rpm:hertz", "gigahertz:megahertz"],
+  angle: ["degrees:radians", "gradians:degrees", "turns:degrees"],
+  temperature: ["celsius:fahrenheit", "celsius:kelvin", "fahrenheit:kelvin"],
+  fuel: ["liters-per-100-km:mpg-us", "liters-per-100-km:mpg-uk", "km-per-liter:mpg-us", "liters-per-100-km:km-per-liter", "mpg-us:mpg-uk", "km-per-liter:mpg-uk"],
+};
+
+/** One-line real-world context per unit so each page says something different. */
+const USE: Record<string, string> = {
+  centimeters: "body height, clothing and furniture sizes",
+  inches: "screen sizes, tyre widths, pipe diameters and clothing in the US",
+  meters: "room dimensions, track events and building plans",
+  feet: "height, ceiling and floor dimensions in the US and UK, and aircraft altitude",
+  kilometers: "road distances and race lengths",
+  miles: "road distances in the US and UK",
+  millimeters: "engineering drawings, screws and camera lenses",
+  yards: "fabric, football fields and golf",
+  "nautical-miles": "sea and air navigation",
+  kilograms: "body weight and groceries in most countries",
+  pounds: "body weight and food packaging in the US and UK",
+  grams: "recipes and nutrition labels",
+  ounces: "recipes, postage and precious metals",
+  stone: "body weight in the UK and Ireland",
+  carats: "gemstones and diamonds",
+  liters: "fuel, drinks and containers",
+  "us-gallons": "US fuel prices and milk",
+  milliliters: "medicine doses and recipes",
+  "us-cups": "American recipes",
+  tablespoons: "cooking and medicine dosing",
+  teaspoons: "cooking and medicine dosing",
+  "us-fluid-ounces": "US drinks and cosmetics labels",
+  "square-feet": "apartments and houses in the US",
+  "square-meters": "apartments and plots almost everywhere else",
+  acres: "land in the US, UK and Canada",
+  hectares: "farmland and forests",
+  feddans: "farmland in Egypt",
+  "kilometers-per-hour": "road speed limits outside the US and UK",
+  "miles-per-hour": "road speed limits in the US and UK",
+  knots: "ships and aircraft",
+  megabytes: "photos, songs and app sizes",
+  gigabytes: "phone storage, downloads and data plans",
+  terabytes: "hard drives and cloud storage",
+  gibibytes: "how Windows and Linux often report disk size",
+  "megabits-per-second": "internet plans from ISPs",
+  "megabytes-per-second": "download speeds shown in browsers and torrent clients",
+  hours: "timesheets and travel",
+  minutes: "cooking, workouts and call lengths",
+  days: "deadlines, trials and warranties",
+  psi: "tyre and compressor pressure in the US",
+  bar: "tyres, diving and industrial gauges",
+  atmospheres: "science and diving",
+  mmhg: "blood pressure readings",
+  kilocalories: "food labels and diet tracking",
+  kilojoules: "food labels in Australia and Europe",
+  "kilowatt-hours": "electricity bills",
+  btu: "heaters and air conditioners",
+  kilowatts: "electric motors, solar panels and EV chargers",
+  horsepower: "car and engine ratings",
+  radians: "maths, physics and programming",
+  degrees: "angles in everyday use, maps and construction",
+  celsius: "weather and cooking outside the US",
+  fahrenheit: "weather and cooking in the US",
+  kelvin: "science and physics",
+  "liters-per-100-km": "car fuel economy in Europe and the Middle East",
+  "mpg-us": "car fuel economy in the US",
+  "mpg-uk": "car fuel economy in the UK",
+  "km-per-liter": "car fuel economy in Asia",
+};
+
+function buildTool(fam: FamilyDef, from: UnitDef, to: UnitDef, exists: (a: string, b: string) => boolean): ToolMeta {
   const slug = `${from.id}-to-${to.id}`;
   const one = convert(fam, from, to, 1);
   const rev = convert(fam, to, from, 1);
@@ -200,32 +287,37 @@ function buildTool(fam: FamilyDef, from: UnitDef, to: UnitDef): ToolMeta {
   const formula = linear
     ? `To convert ${from.name} to ${to.name}, multiply the value by ${fmt((from.factor as number) / (to.factor as number))}. In other words, 1 ${from.singular} equals ${fmt(one)} ${to.name}. To go back, divide by the same number, or multiply ${to.name} by ${fmt(rev)}.`
     : `This conversion is not a single multiplication, because the two scales do not share the same zero point or are inverses of each other. The converter first turns your value into ${fam.base}s and then into ${to.name}. For reference, 1 ${from.singular} equals ${fmt(one)} ${to.name}.`;
+  const uf = USE[from.id], ut = USE[to.id];
+  const context = uf && ut ? `${cap(from.name)} are typically used for ${uf}. ${cap(to.name)} are typically used for ${ut}. That is why people often need to move between the two.` : uf ? `${cap(from.name)} are typically used for ${uf}.` : ut ? `${cap(to.name)} are typically used for ${ut}.` : "";
+  const mid = SAMPLES[3];
+  const worked = `Worked example: ${fmt(mid * 7)} ${from.symbol} is ${fmt(convert(fam, from, to, mid * 7))} ${to.symbol}, and ${fmt(mid * 7)} ${to.symbol} is ${fmt(convert(fam, to, from, mid * 7))} ${from.symbol}.`;
   const article = [
-    `${cap(from.name)} to ${to.name} is one of the ${fam.label} conversions people look up most. Type a number in the box above and the result in ${to.name} (${to.symbol}) appears instantly. Everything runs in your browser, so nothing you type is uploaded or stored, and there is no limit on how many conversions you can make.`,
+    `${cap(from.name)} to ${to.name} is one of the ${fam.label} conversions people look up most. Type a number in the box above and the result in ${to.name} (${to.symbol}) appears instantly. Everything runs in your browser, so nothing you type is uploaded or stored.`,
     formula,
+    context,
     `Quick reference: ${samples.join("; ")}.`,
+    worked,
     fam.blurb,
-    `Results are shown with up to seven significant digits, which is enough for everyday and most professional use. If you need the opposite direction, use the ${to.name} to ${from.name} converter linked in the related tools below. You can also swap the two units with the swap button without leaving this page.`,
-  ].join("\n\n");
+    `Results show up to seven significant digits. Use the swap button to go the other way without leaving this page.`,
+  ].filter(Boolean).join("\n\n");
   const faqs = [
     { q: `How many ${to.name} are in 1 ${from.singular}?`, a: `1 ${from.singular} equals ${fmt(one)} ${to.name} (${to.symbol}).` },
     { q: `How do I convert ${from.name} to ${to.name}?`, a: linear ? `Multiply the number of ${from.name} by ${fmt((from.factor as number) / (to.factor as number))} to get ${to.name}.` : `Use the converter above. It converts through ${fam.base}s and applies the correct formula for you.` },
     { q: `How many ${from.name} are in 1 ${to.singular}?`, a: `1 ${to.singular} equals ${fmt(rev)} ${from.name} (${from.symbol}).` },
     { q: "Is this converter accurate?", a: "It uses the exact or internationally defined conversion factors where they exist. Results are rounded to seven significant digits for display." },
-    { q: "Is my data sent to a server?", a: "No. The calculation happens in your browser and nothing is uploaded." },
   ];
   const related = [
     `${to.id}-to-${from.id}`,
-    ...fam.units.filter((x) => x.id !== from.id && x.id !== to.id).slice(0, 3).map((x) => `${from.id}-to-${x.id}`),
-    ...fam.units.filter((x) => x.id !== from.id && x.id !== to.id).slice(0, 2).map((x) => `${x.id}-to-${to.id}`),
+    ...fam.units.filter((x) => x.id !== from.id && x.id !== to.id && exists(from.id, x.id)).slice(0, 3).map((x) => `${from.id}-to-${x.id}`),
+    ...fam.units.filter((x) => x.id !== from.id && x.id !== to.id && exists(x.id, to.id)).slice(0, 2).map((x) => `${x.id}-to-${to.id}`),
   ];
   return {
     slug,
     title,
     shortDescription: `Convert ${from.name} (${from.symbol}) to ${to.name} (${to.symbol}) instantly. 1 ${from.symbol} = ${fmt(one)} ${to.symbol}.`,
     metaDescription: `Convert ${from.name} to ${to.name} online. 1 ${from.symbol} = ${fmt(one)} ${to.symbol}. Free, instant, works in your browser.`.slice(0, 160),
-    category: UNIT_CATEGORY,
-    keywords: [`${from.name} to ${to.name}`, `${from.symbol} to ${to.symbol}`, `convert ${from.name} to ${to.name}`, `${from.name} to ${to.name} converter`, `${from.name} to ${to.name} calculator`],
+    category: familyCategory(fam.key),
+    keywords: [`${from.name} to ${to.name}`, `${from.symbol} to ${to.symbol}`, `convert ${from.name} to ${to.name}`, `${from.name} to ${to.name} calculator`],
     componentKey: pairKey(fam.key, from.id, to.id),
     article,
     faqs,
@@ -233,9 +325,13 @@ function buildTool(fam: FamilyDef, from: UnitDef, to: UnitDef): ToolMeta {
   };
 }
 
-export const unitTools: ToolMeta[] = FAMILIES.flatMap((fam) =>
-  fam.units.flatMap((from) => fam.units.filter((to) => to.id !== from.id).map((to) => buildTool(fam, from, to)))
-);
+const allowed = new Set<string>();
+for (const [f, list] of Object.entries(DEMAND_PAIRS)) for (const p of list) { const [a, b] = p.split(":"); allowed.add(`${f}:${a}:${b}`); allowed.add(`${f}:${b}:${a}`); }
+
+export const unitTools: ToolMeta[] = FAMILIES.flatMap((fam) => {
+  const exists = (a: string, b: string) => allowed.has(`${fam.key}:${a}:${b}`);
+  return fam.units.flatMap((from) => fam.units.filter((to) => to.id !== from.id && exists(from.id, to.id)).map((to) => buildTool(fam, from, to, exists)));
+});
 
 export function resolvePair(key: string): { fam: FamilyDef; from: UnitDef; to: UnitDef } | null {
   const [, famKey, fromId, toId] = key.split(":");

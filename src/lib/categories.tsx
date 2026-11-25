@@ -1,5 +1,5 @@
 import type { CategoryKey } from "./types";
-import { Code, LineChart, Image as ImageIcon, FileText, File, Sparkles, Palette, Calculator, Shield, Ruler } from "lucide-react";
+import { Code, LineChart, Image as ImageIcon, FileText, File, Sparkles, Palette, Calculator, Shield, Landmark, HeartPulse, CalendarClock, GraduationCap, Dices } from "lucide-react";
 import type { ReactNode } from "react";
 
 export interface CategoryDef {
@@ -68,11 +68,39 @@ export const CATEGORIES: CategoryDef[] = [
     icon: <Calculator size="1em" strokeWidth={2.5} />,
   },
   {
-    key: "unit-converters",
-    title: "Unit Converters",
-    titleAr: "محولات الوحدات",
-    description: "Convert length, weight, volume, area, speed, data, time, temperature and more between any units.",
-    icon: <Ruler size="1em" strokeWidth={2.5} />,
+    key: "finance",
+    title: "Finance Calculators",
+    titleAr: "حاسبات مالية",
+    description: "Loan, mortgage, interest, VAT, profit margin, savings and investment calculators.",
+    icon: <Landmark size="1em" strokeWidth={2.5} />,
+  },
+  {
+    key: "health-fitness",
+    title: "Health & Fitness Calculators",
+    titleAr: "حاسبات الصحة واللياقة",
+    description: "Calories, body fat, water intake, running pace, macros and more.",
+    icon: <HeartPulse size="1em" strokeWidth={2.5} />,
+  },
+  {
+    key: "date-time",
+    title: "Date & Time Tools",
+    titleAr: "أدوات التاريخ والوقت",
+    description: "Date calculators, time zones, countdowns, timers and calendar converters.",
+    icon: <CalendarClock size="1em" strokeWidth={2.5} />,
+  },
+  {
+    key: "education",
+    title: "Education & Math Tools",
+    titleAr: "أدوات التعليم والرياضيات",
+    description: "GPA, grades, equations, primes, ratios and geometry helpers for students.",
+    icon: <GraduationCap size="1em" strokeWidth={2.5} />,
+  },
+  {
+    key: "fun-random",
+    title: "Random & Fun Tools",
+    titleAr: "أدوات عشوائية وترفيه",
+    description: "Random pickers, dice, coin flips and generators.",
+    icon: <Dices size="1em" strokeWidth={2.5} />,
   },
   {
     key: "security-tools",
